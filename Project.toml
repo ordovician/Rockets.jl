@@ -1,0 +1,6 @@
+authors = ["Erik Engheim <erik.engheim@mac.com>"]
+name = "Rockets"
+uuid = "b39edbba-fa67-11e8-3c8a-bb38db7627ae"
+version = "0.1.0"
+
+[deps]
