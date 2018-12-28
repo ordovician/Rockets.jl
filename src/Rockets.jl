@@ -1,3 +1,7 @@
+"""
+A module for doing simple Newton style physics related to the movement
+of bodies. In particular it was made to do simple rocket equations.
+"""
 module Rockets
 
 import Base: length, abs, +, -, *, ==, !=, size, ndims, eltype, similar
@@ -48,5 +52,8 @@ include("segment.jl")
 include("matrix3x3.jl")
 include("rectangle.jl")
 include("circle.jl")
+include("motion.jl")
+include("integration.jl")
+include("plotting.jl")
 
 end # module
