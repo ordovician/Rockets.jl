@@ -1,6 +1,8 @@
-authors = ["Erik Engheim <erik.engheim@mac.com>"]
 name = "Rockets"
 uuid = "b39edbba-fa67-11e8-3c8a-bb38db7627ae"
+authors = ["Erik Engheim <erik.engheim@mac.com>"]
 version = "0.1.0"
 
 [deps]
+DelimitedFiles = "8bb1440f-4735-579b-a4ab-409b98df4dab"
+InteractiveUtils = "b77e0a4c-d291-57a0-90e8-8db25a27a240"
