@@ -1,0 +1,7 @@
+Name,Company,Mass (tonne),Thrust (kN),Specific Impulse (s),Fuel consumption,Burn time (s)
+LV-T30,Kerbal,1.25,240,265,15.79,
+LV-T45 ,Kerbal,1.5,167.97,250,13.7,
+48-7S,Kerbal,0.1,20,320,,
+Merlin 1D,SpaceX,0.47,845,282,,162
+Kestrel 2,SpaceX,0.052,31,317,,418
+RD-180,NPO Energomash,5.48,3830,311,,270
