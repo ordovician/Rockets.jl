@@ -1,7 +1,7 @@
-Name,Company,Total Mass (tonne),Dry Mass (tonne),
-FL-T100,Kerbal,0.56,0.06,
-FL-T200,Kerbal,1.13,0.13,
-FL-T400,Kerbal,2.25,0.25,
-F9 1st stage,SpaceX,415,20,
-F1 1st stage,SpaceX,41.1,2.1,
-F1 2nd stage,SpaceX,4.8,0.8,
+name,company,total_mass,dry_mass
+FL-T100,Kerbal,0.56,0.06
+FL-T200,Kerbal,1.13,0.13
+FL-T400,Kerbal,2.25,0.25
+F9 1st stage,SpaceX,415,20
+F1 1st stage,SpaceX,41.1,2.1
+F1 2nd stage,SpaceX,4.8,0.8

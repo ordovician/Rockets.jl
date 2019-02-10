@@ -1,4 +1,4 @@
-Name,Company,Mass (tonne),Thrust (kN),Specific Impulse (s),Fuel consumption,Burn time (s)
+name,company,mass,thrust,Isp,fuel_consumption,burn_time
 LV-T30,Kerbal,1.25,240,265,15.79,
 LV-T45 ,Kerbal,1.5,167.97,250,13.7,
 48-7S,Kerbal,0.1,20,320,,
