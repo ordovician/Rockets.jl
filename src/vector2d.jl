@@ -28,6 +28,7 @@ const × = cross
 -(u::Vector2D, v::Vector2D) = Vector2D(u.x - v.x, u.y - v.y)
 *(factor::Number, v::VecOrDir) = Vector2D(v.x * factor, v.y * factor)
 *(v::VecOrDir, factor::Number) = Vector2D(v.x * factor, v.y * factor)
+/(v::VecOrDir, factor::Number) = Vector2D(v.x / factor, v.y / factor)
 
 mincomp(u::Vector2D, v::Vector2D) = Vector2D(min(u.x, v.x), min(u.y, v.y))
 maxcomp(u::Vector2D, v::Vector2D) = Vector2D(max(u.x, v.x), max(u.y, v.y))
