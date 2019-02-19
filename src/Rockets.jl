@@ -4,7 +4,7 @@ of bodies. In particular it was made to do simple rocket equations.
 """
 module Rockets
 
-import Base: length, abs, +, -, *, ==, !=, size, ndims, eltype, similar
+import Base: length, abs, +, -, *, /, ==, !=, size, ndims, eltype, similar
 
 export 	Point, ismin, ismax,
 		Vector2D, dot, cross, ⋅, ×,
@@ -54,6 +54,7 @@ include("rectangle.jl")
 include("circle.jl")
 include("rocket-equations.jl")
 include("motion.jl")
+incldue("body.jl")
 include("integration.jl")
 include("plotting.jl")
 

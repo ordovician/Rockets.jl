@@ -1,5 +1,4 @@
-import Base: getproperty
-export Body, integrate, explicit_euler, semi_implicit_euler
+export integrate, explicit_euler, semi_implicit_euler
 
 # Numerical integraion of equation for motion
 # this is the approach we usually use in computer games and physics simulations
@@ -8,26 +7,6 @@ export Body, integrate, explicit_euler, semi_implicit_euler
 # A great source of information about this can be found at: 
 #   https://gafferongames.com/post/integration_basics/
 
-"""
-Represents a physics body with a position, velocity and mass onto which a force
-acts to change its acceleration.
-"""
-mutable struct Body{T <: Number}
-    position::Point{T}
-    velocity::Vector2D{T}
-    force::Vector2D{T}
-    mass::T
-end
-
-# Allows us to access properties like acceleration which is not
-# explicitly stored but which may be derived from other attributes
-function getproperty(body::Body, key::Symbol)
-   if :acceleration == key
-       body.force / body.mass
-   else
-       getfield(body, key)
-   end
-end
 
 # Integration methods
 
@@ -36,7 +15,7 @@ end
 Perform one integration step using the explict euler method. This will update
 the position and velocity of the `body` by advancing the time with `Δt`
 """
-function explicit_euler(body::Body{T}, Δt::Number) where T <: Number
+function explicit_euler(body::AbstractBody{T}, Δt::Number) where T <: Number
     body.position += body.velocity * Δt
     body.velocity += body.acceleration * Δt
 end
@@ -46,7 +25,7 @@ end
 Perform one integration step using the semi implicit euler method. This will update
 the position and velocity of the `body` by advancing the time with `Δt`
 """
-function semi_implicit_euler(body::Body{T}, Δt::Number) where T <: Number
+function semi_implicit_euler(body::AbstractBody{T}, Δt::Number) where T <: Number
     body.velocity += body.acceleration * Δt
     body.position += body.velocity * Δt
 end
