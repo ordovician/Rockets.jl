@@ -14,7 +14,7 @@ mutable struct PropellantTank
    propellant_mass::Float64 
 end
 
-abstract type Payload <: AbstractBody end
+abstract type Payload <: AbstractBody{Float64} end
 
 """
 A rocket is an abstraction of rockets single stage and multi stage rockets

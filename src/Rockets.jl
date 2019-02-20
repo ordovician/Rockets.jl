@@ -56,7 +56,9 @@ include("rocket-equations.jl")
 include("motion.jl")
 include("body.jl")
 include("integration.jl")
-# include("rocket-parts.jl")
+include("rocket-parts.jl")
+include("rocket-builder.jl")
+# include("simulator.jl")
 include("plotting.jl")
 
 end # module
