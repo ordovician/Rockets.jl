@@ -1,5 +1,5 @@
 import Base: getproperty
-export AbstractBody, Body
+export AbstractBody, Body, force, mass, acceleration
 
 abstract type AbstractBody{T <: Number} end
 
