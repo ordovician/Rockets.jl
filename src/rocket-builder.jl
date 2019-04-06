@@ -37,3 +37,18 @@ function load_rocket_engines()
     end
     rocket_engines
 end
+
+function load_propellant_tanks()
+    tanks_table = CSV.read("data/propellant-tanks.csv")
+    tanks = Dict{String, PropellantTank}()
+    for row in eachrow(tanks_table)
+        if any(ismissing, row) continue end
+        name = row[:name]
+        total_mass = row[:total_mass]
+        dry_mass   = row[:dry_mass]
+        tanks[name] = PropellantTank(dry_mass, total_mass, 0.0)
+    end
+    tanks
+end
+    
+end

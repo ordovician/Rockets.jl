@@ -1,4 +1,4 @@
-export integrate, explicit_euler, semi_implicit_euler
+export integrate!, explicit_euler!, semi_implicit_euler!
 
 # Numerical integraion of equation for motion
 # this is the approach we usually use in computer games and physics simulations
@@ -15,7 +15,7 @@ export integrate, explicit_euler, semi_implicit_euler
 Perform one integration step using the explict euler method. This will update
 the position and velocity of the `body` by advancing the time with `Δt`
 """
-function explicit_euler(body::AbstractBody{T}, Δt::Number) where T <: Number
+function explicit_euler!(body::RigidBody{T}, Δt::Number) where T <: Number
     body.position += body.velocity * Δt
     body.velocity += body.acceleration * Δt
 end
@@ -25,13 +25,13 @@ end
 Perform one integration step using the semi implicit euler method. This will update
 the position and velocity of the `body` by advancing the time with `Δt`
 """
-function semi_implicit_euler(body::AbstractBody{T}, Δt::Number) where T <: Number
+function semi_implicit_euler!(body::RigidBody{T}, Δt::Number) where T <: Number
     body.velocity += body.acceleration * Δt
     body.position += body.velocity * Δt
 end
 
 # Set the default function for integrating position and volocity of a physics body
-global integrate = explicit_euler
+global integrate! = explicit_euler!
 
 # Runge-Kutta method: https://en.wikipedia.org/wiki/Runge–Kutta_methods
 # dy(t)/dt = f(t, y),  y(t0) = y0    # Calculates derivative of y at t.

@@ -1,5 +1,9 @@
 import Base: getproperty
 
+export RocketEngine, PropellantTank, Capsule, Sattelite,
+       Booster, SingleBooster, MultiBooster,
+       mass, force, update!
+
 mutable struct RocketEngine
     name::String
     mass::Float64
@@ -14,21 +18,26 @@ mutable struct PropellantTank
    propellant_mass::Float64 
 end
 
-abstract type Payload <: AbstractBody{Float64} end
+abstract type Payload end
 
 """
-A rocket is an abstraction of rockets single stage and multi stage rockets
+    A booster is the bottom stage of a rocket, containing fuel tanks and rocket engines.
+    A booster push a payload up from the ground.
 """
-abstract type Rocket  <: Payload end
+abstract type Booster end
 
 """
 Heat shield below and typically no rocket engines or fuel tanks
 """
 mutable struct Capsule <: Payload
-    body::Body{Float64}
+
 end
 
-mutable struct  SingleStageRocket <: Rocket
+mutable struct Sattelite <: Payload
+
+end
+
+mutable struct  SingleBooster <: Booster
     tank::PropellantTank
     engine::RocketEngine
     no_engines::Int64
@@ -36,10 +45,10 @@ mutable struct  SingleStageRocket <: Rocket
     throttle::Float64
 end
 
-mutable struct  MultiStageRocket <: Rocket
-    payload::Payload
-    boosters::Array{SingleStageRocket}
+mutable struct  MultiBooster <: Booster
+    boosters::Array{SingleBooster}
 end
+
 
 ########### RocketEngine #############################################################################
 RocketEngine(name, mass, max_thrust, Isp) = RocketEngine(name, mass, max_thrust, 0.0, Isp) 
@@ -71,39 +80,40 @@ end
 mass(capsule::Capsule) = mass(capsule.body)
 
 
-########### SingleStageRocket ###################################################################
-mass(r::SingleStageRocket) = mass(r.tanks) + mass(r.engine)*r.no_engines
+########### SingleBooster ###################################################################
+mass(b::SingleBooster) = mass(b.tanks) + mass(b.engine)*b.no_engines
 
-function thrust(r::SingleStageRocket)
-    @assert r.no_active_engines <= r.no_engines "Can't have more active engines than there are engines"
-    @assert r.throttle >= engine.min_throttle "Can't throttle engine below minimum required throttle"
-    r.engine.max_thrust * r.throttle * r.no_active_engines
+function thrust(b::SingleBooster)
+    @assert b.no_active_engines <= b.no_engines "Can't have more active engines than there are engines"
+    @assert b.throttle >= b.engine.min_throttle "Can't throttle engine below minimum required throttle"
+    b.engine.max_thrust * b.throttle * b.no_active_engines
 end
 
-force(r::SingleStageRocket) = thrust(r)
+force(b::Booster) = thrust(b)
 
-function update!(r::SingleStageRocket, t::Number, Δt::Number)
-    mflow = mass_flow(thrust(r), r.engine.Isp)
-    r.tank.propellant_mass -= min(mflow * Δt, r.tank.propellant_mass)
-    if r.tank.propellant_mass == 0
-        r.no_active_engines = 0
+function update!(b::SingleBooster, t::Number, Δt::Number)
+    mflow = mass_flow(thrust(b), b.engine.Isp)
+    b.tank.propellant_mass -= min(mflow * Δt, b.tank.propellant_mass)
+    if b.tank.propellant_mass == 0
+        b.no_active_engines = 0
     end
 end
 
 
-########### MultiStageRocket ###################################################################
-mass( r::MultiStageRocket) = mass(r.payload) + sum(mass.(r.boosters))
-force(r::MultiStageRocket) = sum(force.(r.boosters))
+########### MultiBooster ###################################################################
+mass( b::MultiBooster) = sum(mass.(b.boosters))
+force(b::MultiBooster) = sum(force.(b.boosters))
 
 """
-    update!(r::MultiStageRocket, t, Δt)
+    update!(r::MultiBooster, t, Δt)
     
-Called each step in the simulation of a multistage rocket. Each step we advance the present time `t`
-with Δt. This means typically adjusting the mass of propellant which is left, which will alter the total
+Called each step in the simulation of a multiple booster worker as first stage of a rocket. 
+Each step we advance the present time `t` with Δt. 
+This means typically adjusting the mass of propellant which is left, which will alter the total
 mass of the rocket, which will affect its acceleration.
 """
-function update!(r::MultiStageRocket, t::Number, Δt::Number)
-    for booster in r.boosters
+function update!(b::MultiBooster, t::Number, Δt::Number)
+    for booster in b.boosters
         update!(booster, t, Δt)
     end
 end
