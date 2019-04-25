@@ -1,3 +1,5 @@
+export Matrix3x3, zerotransform, identity, rotate, scale, transpose, pos, x, y
+
 struct Matrix3x3{T <: Number}
 	# First row
 	m11::T

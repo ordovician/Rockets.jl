@@ -14,7 +14,8 @@ min(u::Point, v::Point) = ismin(u, v) ? u : v
 max(u::Point, v::Point) = ismax(u, v) ? u : v
 
 -(p::Point, q::Point) = Vector2D(p.x - q.x, p.y - q.y)
-+(p::Point, v::Vector2D) = Point(u.x + v.x, u.y + v.y)
+-(p::Point, v::Vector2D) = Point(p.x - v.x, p.y - v.y)
++(p::Point, v::Vector2D) = Point(p.x + v.x, p.y + v.y)
 +(v::Vector2D, p::Point) = p + v
 
 vector2D(p::Point) = Vector2D(p.x, p.y)

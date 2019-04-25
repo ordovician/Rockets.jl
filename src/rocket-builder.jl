@@ -1,5 +1,5 @@
-using CSV
-using DataFrames
+import CSV
+import DataFrames: eachrow, ismissing
 
 export load_rocket_engines
 
@@ -49,6 +49,4 @@ function load_propellant_tanks()
         tanks[name] = PropellantTank(dry_mass, total_mass, 0.0)
     end
     tanks
-end
-    
 end

@@ -1,3 +1,6 @@
+export  Rect, isinside, isintersecting, transform, boundingbox,
+        center, size, halfsize, topleft, bottomright, topright, surround
+
 struct Rect{T}
 	min::Point{T}
 	max::Point{T}
@@ -9,12 +12,12 @@ center(r::Rect) = Point((r.max.x + r.min.x) * 0.5, (r.max.y + r.min.y) * 0.5)
 size(r::Rect) = abs(r.max - r.min)
 halfsize(r::Rect) = 0.5 * size(r)
 
-function inside(r::Rect, p::Point)
+function isinside(r::Rect, p::Point)
 	ismin(r.min, p) && ismax(r.max, p) ||
 		pos == r.min || pos == r.max 
 end
 
-function intersect(r::Rect, s::Rect)
+function isintersecting(r::Rect, s::Rect)
 	d = abs(center(s) - center(r))
 	h1 = halfsize(r)
 	h2 = halfsize(s)
@@ -32,4 +35,4 @@ transform(r::Rect, m::Matrix3x3) = Rect(m * r.min, m * r.max)
 
 surround(r::Rect, p::Point) = Rect(mincomp(r.min, p), maxcomp(r.max, p))
 surround(r::Rect, s::Rect) = Rect(mincomp(r.min, s.min), maxcomp(r.max, s.max))
-boundingbox(r::Rect) = copy(r)
+boundingbox(r::Rect) = r

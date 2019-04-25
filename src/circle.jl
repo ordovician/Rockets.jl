@@ -1,12 +1,14 @@
+export Circle, isinside, isintersecting, transform, boundingbox
+
 struct Circle{T <: Number}
 	center::Point{T}
 	radius::T
 end
 
-inside(c::Circle, p::Point) = norm(p - c.center) < c.radius
-intersect(c::Circle, k::Circle) = norm(k.center - c.center) < c.radius + k.radius
+isinside(c::Circle, p::Point) = norm(p - c.center) < c.radius
+isintersecting(c::Circle, k::Circle) = norm(k.center - c.center) < c.radius + k.radius
 
-function intersect(c::Circle, r::Rect)
+function isintersecting(c::Circle, r::Rect)
 	r2 = c.radius^2
 	
 	# translate coordinate system placing circle at center
@@ -43,6 +45,9 @@ function intersect(c::Circle, r::Rect)
 	false
 end
 
-intersect(r::Rect, c::Circle) = intersect(c, r)
+isintersecting(r::Rect, c::Circle) = isintersecting(c, r)
 transform(c::Circle, m::Matrix3x3) = Circle(m * c.center, c.radius)
-boundingbox(c::Circle) = Rect(c.center - Vector2D(c.radius, c.radius), c.center + Vector2D(c.radius, c.radius))
+
+function boundingbox(c::Circle)
+    Rect(c.center - Vector2D(c.radius, c.radius), c.center + Vector2D(c.radius, c.radius))
+end

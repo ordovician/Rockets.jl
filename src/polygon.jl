@@ -1,3 +1,5 @@
+export Polygon, isintersecting, boundingbox
+
 struct Polygon{T <: Number}
 	points::Vector{Point{T}}
 end
@@ -35,7 +37,7 @@ function project(poly::Polygon, axis::Direction)
 	return result
 end
 
-function intersect(a::Polygon, b::Polygon)
+function isintersecting(a::Polygon, b::Polygon)
 	sep_axis = [sepaxis(a), sepaxis(b)]
 	for i = 1:length(sep_axis)
 		a_proj = project(a, sep_axis[i])
@@ -54,19 +56,19 @@ function intersect(a::Polygon, b::Polygon)
 	return true
 end 
 
-function intersect(poly::Polygon, circle::Circle)
+function isintersecting(poly::Polygon, circle::Circle)
 	ps = poly.points
 	for i = 2:length(ps)
-		if intersect(circle, Segment(ps[i - 1], ps[i]))
+		if isintersecting(circle, Segment(ps[i - 1], ps[i]))
 			return true
 		end
 	end
 	
-	return intersect(circle, Segment(ps[end], ps[1]))
+	return isintersecting(circle, Segment(ps[end], ps[1]))
 end
 
 "Only works for convex shapes which are counter clockwise"
-function inside(poly::Polygon, q::Point)
+function isinside(poly::Polygon, q::Point)
 	ps = poly.points
 	for i = 2:length(ps)
 		if cross(ps[i] - ps[i - 1], q - ps[i - 1]) <= 0.0

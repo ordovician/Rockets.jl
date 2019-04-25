@@ -1,3 +1,5 @@
+export Segment, isbelow, ison, isonend, tovector, isintersecting
+
 struct Segment{T <: Number}
 	source::Point{T}
 	target::Point{T}
@@ -19,7 +21,7 @@ ison(s::Segment, p::Point)    = pointplacement(s, p) == 0
 isonend(s::Segment, p::Point) = p == s.source || p == s.target
 tovector(s::Segment) = s.target - s.source
 
-function intersect(s1::Segment, s2::Segment)
+function isintersecting(s1::Segment, s2::Segment)
 	d = tovector(s1)
 	v = tovector(s2)
 	

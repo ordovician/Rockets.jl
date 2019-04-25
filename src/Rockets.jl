@@ -8,11 +8,6 @@ import Base: length, abs, +, -, *, /, ==, !=, size, ndims, eltype, similar
 
 export 	Point, ismin, ismax,
 		Vector2D, dot, cross, ⋅, ×,
-		Segment,
- 		Circle,
-		Rect,
-		Polygon,
-		Matrix3x3,
 		sqrnorm, 
 		unit, 
 		normal, 
