@@ -7,35 +7,60 @@
         @test Vector2D(1.5, 2.0) ⋅ Vector2D(3.0, 4.0) == 1.5 * 3 + 2 * 4
         f = 1.5
         @test Vector2D(3, 4) * f == Vector2D(3*f, 4*f)
-        
+
     end
-    
+
     @testset "Rect tests" begin
         @testset "rect intersections" begin
             r1 = Rect(Point(1, 1), Point(4, 4))
-            r2 = Rect(Point(2, 2), Point(3, 3)) 
-            r3 = Rect(Point(2, 3), Point(5, 6))  
-            r4 = Rect(Point(5, 5), Point(6, 6))  
-  
+            r2 = Rect(Point(2, 2), Point(3, 3))
+            r3 = Rect(Point(2, 3), Point(5, 6))
+            r4 = Rect(Point(5, 5), Point(6, 6))
+
             @test isintersecting(r1, r2)
             @test isintersecting(r1, r3)
             @test !isintersecting(r1, r4)
         end
- 
-        @testset "Rect surround points" begin       
+
+        @testset "Rect surround points" begin
             r1 = Rect(Point(1, 1), Point(4, 4))
             r2 = surround(r1, Point(4, 5))
             @test r2 == Rect(Point(1, 1), Point(4, 5))
             r3 = surround(r2, Point(0, 0))
             @test r3 == Rect(Point(0, 0), Point(4, 5))
         end
-        
-        @testset "Rect translate" begin       
+
+        @testset "Rect translate" begin
             r1 = Rect(Point(1, 1), Point(4, 4))
-            r1 = translate(r1, Vector2D(0, 3)) 
-            @test r1 == Rect(Point(1, 4), Point(4, 7))       
+            r1 = translate(r1, Vector2D(0, 3))
+            @test r1 == Rect(Point(1, 4), Point(4, 7))
         end
-        
+    end
+
+    @testset "Segment tests" begin
+        @testset "segment intersections" begin
+            s1 = Segment(Point(-1.0, 1.0), Point(2.0, 1.0))
+            s2 = Segment(Point(0.0, 2.0), Point(0.0, -2.0))
+            s3 = Segment(Point(-1.0, -2.0), Point(-1.0, 2.0))
+            s4 = Segment(Point(-1.0, 0.0), Point(2.0, 0.0))
+            s5 = Segment(Point(-2.0, 1.0), Point(-1.0, 1.0))
+            s6 = Segment(Point(-2.0, 1.0), Point(0.0, 1.0))
+
+            s7 = Segment(Point(1.0, 1.0), Point(4.0, 4.0))
+            s8 = Segment(Point(1.0, 4.0), Point(4.0, 1.0))
+
+            # NOTE: Parallell line Segmentments are defined as not intersecting even when they overlap
+            @test intersection(s1, s2) == Point(0.0, 1.0)
+
+            @test isintersecting(s7, s8)
+            @test !isintersecting(s1, s1)  # Completly Overlapping and parallell
+            @test isintersecting(s1, s2)   # Perpendicular
+            @test isintersecting(s1, s3)   # Perpendicular
+            @test !isintersecting(s1, s4)  # Parallell Segmentments
+            @test !isintersecting(s1, s5)  # Tangenting Segmentmen parallell
+            @test !isintersecting(s1, s6)  # Parallell overlapping
+        end
+
     end
 
     @testset "Circle tests" begin
@@ -44,14 +69,14 @@
             c2 = Circle(Point(2, 1), 4)
             c3 = Circle(Point(10, 1), 4)
             c4 = Circle(Point(9, 1), 4)
-            
+
             @test isintersecting(c1, c2)
             @test !isintersecting(c1, c3)
             @test !isintersecting(c1, c4)
         end
-        
-        
-        
+
+
+
         # @testset "rectangle intersections" begin
         #     rect = Rect(Point(0.0, 0.0), Point(10.0, 10.0))
         #     c1 = Circle(Point(5.0, 5.0), 2.0)   # Clearly inside
@@ -80,4 +105,3 @@
         # end
     end
 end
-

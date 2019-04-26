@@ -17,7 +17,7 @@ function unit(v::Vector2D)
 end
 
 dot(u::VecOrDir, v::VecOrDir) = u.x*v.x + u.y*v.y
-cross(u::VecOrDir, v::VecOrDir) = u.x*v.y + u.y*v.x
+cross(u::VecOrDir, v::VecOrDir) = u.x*v.y - u.y*v.x
 abs(v::VecOrDir) = Vector2D(abs(v.x), abs(v.y))
 angle(v::VecOrDir) = atan2(v.y, v.x)
   
