@@ -1,5 +1,5 @@
 export  Rect, isinside, isintersecting, transform, boundingbox,
-        center, size, halfsize, topleft, bottomright, topright, surround
+        center, size, halfsize, topleft, bottomright, topright, surround, translate
 
 struct Rect{T}
 	min::Point{T}
@@ -36,3 +36,5 @@ transform(r::Rect, m::Matrix3x3) = Rect(m * r.min, m * r.max)
 surround(r::Rect, p::Point) = Rect(mincomp(r.min, p), maxcomp(r.max, p))
 surround(r::Rect, s::Rect) = Rect(mincomp(r.min, s.min), maxcomp(r.max, s.max))
 boundingbox(r::Rect) = r
+
+translate(r::Rect, Δ::Vector2D) = Rect(r.min + Δ, r.max + Δ)

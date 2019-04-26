@@ -4,7 +4,7 @@ of bodies. In particular it was made to do simple rocket equations.
 """
 module Rockets
 
-import Base: length, abs, +, -, *, /, ==, !=, size, ndims, eltype, similar
+import Base: length, abs, +, -, *, /, ==, !=, size, ndims, eltype, similar, min, max
 
 export 	Point, ismin, ismax,
 		Vector2D, dot, cross, ⋅, ×,

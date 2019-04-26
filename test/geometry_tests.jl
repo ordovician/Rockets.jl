@@ -9,6 +9,34 @@
         @test Vector2D(3, 4) * f == Vector2D(3*f, 4*f)
         
     end
+    
+    @testset "Rect tests" begin
+        @testset "rect intersections" begin
+            r1 = Rect(Point(1, 1), Point(4, 4))
+            r2 = Rect(Point(2, 2), Point(3, 3)) 
+            r3 = Rect(Point(2, 3), Point(5, 6))  
+            r4 = Rect(Point(5, 5), Point(6, 6))  
+  
+            @test isintersecting(r1, r2)
+            @test isintersecting(r1, r3)
+            @test !isintersecting(r1, r4)
+        end
+ 
+        @testset "Rect surround points" begin       
+            r1 = Rect(Point(1, 1), Point(4, 4))
+            r2 = surround(r1, Point(4, 5))
+            @test r2 == Rect(Point(1, 1), Point(4, 5))
+            r3 = surround(r2, Point(0, 0))
+            @test r3 == Rect(Point(0, 0), Point(4, 5))
+        end
+        
+        @testset "Rect translate" begin       
+            r1 = Rect(Point(1, 1), Point(4, 4))
+            r1 = translate(r1, Vector2D(0, 3)) 
+            @test r1 == Rect(Point(1, 4), Point(4, 7))       
+        end
+        
+    end
 
     @testset "Circle tests" begin
         @testset "circle intersections" begin
@@ -21,6 +49,8 @@
             @test !isintersecting(c1, c3)
             @test !isintersecting(c1, c4)
         end
+        
+        
         
         # @testset "rectangle intersections" begin
         #     rect = Rect(Point(0.0, 0.0), Point(10.0, 10.0))

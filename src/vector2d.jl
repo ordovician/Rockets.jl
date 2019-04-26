@@ -30,8 +30,8 @@ const × = cross
 *(v::VecOrDir, factor::Number) = Vector2D(v.x * factor, v.y * factor)
 /(v::VecOrDir, factor::Number) = Vector2D(v.x / factor, v.y / factor)
 
-mincomp(u::Vector2D, v::Vector2D) = Vector2D(min(u.x, v.x), min(u.y, v.y))
-maxcomp(u::Vector2D, v::Vector2D) = Vector2D(max(u.x, v.x), max(u.y, v.y))
+mincomp(u::T, v::T) where {T <: PointVecOrDir} = T(min(u.x, v.x), min(u.y, v.y))
+maxcomp(u::T, v::T)  where {T <: PointVecOrDir} = T(max(u.x, v.x), max(u.y, v.y))
 
 point(v::Vector2D) = Point(v.x, v.y)
 
