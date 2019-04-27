@@ -1,39 +1,25 @@
-import Base: eltype
+import Base: size, IndexStyle, setindex!, getindex, transpose
 
-export Matrix3x3, zerotransform, eye, rotate, scale, transpose, pos, x, y
+export  Matrix3x3, zerotransform, eye, rotate, scale, transpose, 
+        location, direction, xloc, yloc
 
-mutable struct Matrix3x3{T <: Number}
-	# First row
-	m11::T
-	m12::T
-	m13::T
-	
-	# Second row
-	m21::T
-	m22::T
-	m23::T
-	
-	# Third row
-	m31::T
-	m32::T
-	m33::T
+mutable struct Matrix3x3{T <: Number} <: AbstractArray{T, 2}
+    m::Matrix{T}
 end
 
-eltype(::Type{Matrix3x3{E}}) where {E <: Number} = @isdefined(E) ? E : Any
+size(M::Matrix3x3) = size(M.m)
+IndexStyle(::Type{<:Matrix3x3}) = IndexLinear()
 
-function zerotransform(::Type{E}) where {E <: Number}
-	z = zero(E)
-    Matrix3x3(
-	 z,	z, z,   
-	 z,	z, z,
-	 z,	z, z)
-end
+setindex!(M::Matrix3x3, v::Number, I::Vararg{Int,2}) = M.m[I...] = v
+getindex(M::Matrix3x3, i::Int) = M.m[i]
+
+zerotransform(::Type{E}) where {E <: Number} = Matrix3x3(zeros(E, 3, 3))
 
 function eye(::Type{E}) where {E <: Number}
 	a = zerotransform(E)
-	a.m11 = one(E)
-	a.m22 = one(E)
-	a.m33 = one(E)
+	a.m[1, 1] = one(E)
+	a.m[2, 2] = one(E)
+	a.m[3, 3] = one(E)
 	
 	return a
 end
@@ -41,33 +27,33 @@ end
 
 function Matrix3x3(pos::Point, ang::Number)
 	a = eye(Float64)
-	a.m13 = pos.x
-	a.m23 = pos.y
+	a.m[1, 3] = pos.x
+	a.m[2, 3] = pos.y
 	
 	cosine = cos(ang)
 	sine   = sin(ang)
 	
-	a.m11 = cosine
-	a.m12 = -sine
-	a.m21 = sine
-	a.m22 = cosine
+	a.m[1, 1] = cosine
+	a.m[1, 2] = -sine
+	a.m[2, 1] = sine
+	a.m[2, 2] = cosine
 	
 	return a
 end
 
 function translate(v::Vector2D)
 	a = eye(eltype(v))
-	a.m13 = v.x
-	a.m23 = v.y
+	a.m[1, 3] = v.x
+	a.m[2, 3] = v.y
 	
 	return a
 end
 
 function scale(x::T, y::T) where {T <: Number}
 	a = zerotransform(T)
-	a.m11 = x
-	a.m22 = y
-	a.m33 = zero(T)
+	a.m[1, 1] = x
+	a.m[2, 2] = y
+	a.m[3, 3] = zero(T)
 	
 	return m
 end
@@ -77,93 +63,54 @@ function rotate(ang::Number)
 	sine = sin(ang)
 	cosine = cos(ang)
 	
-	a.m11 = cosine
-	a.m12 = -sine
-	a.m21 = sine
-	a.m22 = cosine
+	a.m[1, 1] = cosine
+	a.m[1, 2] = -sine
+	a.m[2, 1] = sine
+	a.m[2, 2] = cosine
     
     a
 end
 
-pos(a::Matrix3x3) = Point(a.m13, a.m23)
-dir(a::Matrix3x3) = Vector2D(a.m11, a.m21)
-x(a::Matrix3x3) = a.m13
-y(a::Matrix3x3) = a.m23
+location(a::Matrix3x3) = Point(a.m[1, 3], a.m[2, 3])
+direction(a::Matrix3x3) = Vector2D(a.m[1, 1], a.m[2, 1])
+xloc(a::Matrix3x3) = a.m[1, 3]
+yloc(a::Matrix3x3) = a.m[2, 3]
   
-function +(a::Matrix3x3, b::Matrix3x3)
-	Matrix3x3(
-		a.m11 + b.m11,
-		a.m12 + b.m12,
-		a.m13 + b.m13,
-		
-		a.m21 + b.m21,
-		a.m22 + b.m22,
-		a.m23 + b.m23,
-		
-		a.m31 + b.m31,
-		a.m32 + b.m32,
-		a.m33 + b.m33
-	)
+
+function *(a::Matrix3x3, b::Matrix3x3)
+    T = promote_type(eltype(a), eltype(b))
+    c = Matrix3x3(Matrix{T}(undef, 3, 3))
+    for i in 1:3, j in 1:3
+        sum = zero(T)
+        for k in 1:3
+            sum += a[i, k] * b[k, j]
+        end
+        c[i, j] = sum
+    end
+    c
 end
-
-function -(a::Matrix3x3, b::Matrix3x3)
-	Matrix3x3(
-		a.m11 - b.m11,
-		a.m12 - b.m12,
-		a.m13 - b.m13,
-
-		a.m21 - b.m21,
-		a.m22 - b.m22,
-		a.m23 - b.m23,
-
-		a.m31 - b.m31,
-		a.m32 - b.m32,
-		a.m33 - b.m33)
-end
-
-function *(a::Number, b::Matrix3x3)
-	Matrix3x3(
-		a * b.m11,
-		a * b.m12,
-		a * b.m13,
-
-		a * b.m21,
-		a * b.m22,
-		a * b.m23,
-
-		a * b.m31,
-		a * b.m32,
-		a * b.m33)
-end
-
-*(a::Matrix3x3, b::Number) = b * a
 
 function *(a::Matrix3x3, v::Point)
-	Point(v.x*a.m11 + v.y*a.m12 + a.m13,
-		  v.x*a.m21 + v.y*a.m22 + a.m23)
+	Point(v.x*a.m[1, 1] + v.y*a.m[1, 2] + a.m[1, 3],
+		  v.x*a.m[2, 1] + v.y*a.m[2, 2] + a.m[2, 3])
 end
 
 *(v::Point, a::Matrix3x3) = a * v
 
 function *(a::Matrix3x3, v::Vector2D)
-	Vector2D(v.x*a.m11 + v.y*a.m12, 
-			 v.x*a.m21 + v.y*a.m22)
+	Vector2D(v.x*a.m[1, 1] + v.y*a.m[1, 2], 
+			 v.x*a.m[2, 1] + v.y*a.m[2, 2])
 end
 
 *(v::Vector2D, a::Matrix3x3) = a * v
 
 
 function transpose(a::Matrix3x3)
-	Matrix3x3(
-		a.m11,
-		a.m21,
-		a.m31,
-		
-		a.m12,
-		a.m22,
-		a.m32,
-		
-		a.m13,
-		a.m23,
-		a.m33)
+    data = Matrix{eltype(a)}(undef, 3, 3)
+	t = Matrix3x3(data)
+    
+    for i in 1:3, j in 1:3
+       t.m[i, j] = a.m[j, i] 
+    end
+    t
 end

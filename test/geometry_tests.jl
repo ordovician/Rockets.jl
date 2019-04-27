@@ -22,7 +22,27 @@
             p = Point(1, 0)
             @test rotate(θ)*p ≈ Point(cos(θ), sin(θ))
             @test rotate(-θ)*p ≈ Point(cos(-θ), sin(-θ))
-        end    
+        end
+        
+        @testset "rotation and translations" begin
+            p = Point(2, 2)
+            trans = translate(Vector2D(3, 3))
+            rot   = rotate(pi/2)
+            @test rot*p ≈ Point(-2, 2)
+            @test trans*p ≈ Point(5, 5)
+            @test rot*trans*p ≈ Point(-5, 5)            
+        end
+        
+        @testset "matrix arithmetic" begin
+            @test eye(Int) + eye(Int) + eye(Int) == 3*eye(Int)
+            @test eye(Int) - eye(Int) == zerotransform(Int)
+            x = 11
+            y = 42
+            trans = translate(Vector2D(x, y))
+            @test location(trans) == Point(x, y)
+            @test xloc(trans) == x
+            @test yloc(trans) == y
+        end  
     end
     
 
