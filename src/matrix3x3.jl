@@ -1,6 +1,8 @@
-export Matrix3x3, zerotransform, identity, rotate, scale, transpose, pos, x, y
+import Base: eltype
 
-struct Matrix3x3{T <: Number}
+export Matrix3x3, zerotransform, eye, rotate, scale, transpose, pos, x, y
+
+mutable struct Matrix3x3{T <: Number}
 	# First row
 	m11::T
 	m12::T
@@ -17,31 +19,28 @@ struct Matrix3x3{T <: Number}
 	m33::T
 end
 
-function zerotransform()
-	Matrix3x3(
-	 0.0,
-	 0.0,
-	 0.0,
-	 0.0,    
-	 0.0,
-	 0.0,
-	 0.0,
-	 0.0,
-	 0.0)
+eltype(::Type{Matrix3x3{E}}) where {E <: Number} = @isdefined(E) ? E : Any
+
+function zerotransform(::Type{E}) where {E <: Number}
+	z = zero(E)
+    Matrix3x3(
+	 z,	z, z,   
+	 z,	z, z,
+	 z,	z, z)
 end
 
-function identity()
-	a = zerotransform()
-	a.m11 = 1.0
-	a.m22 = 1.0
-	a.m33 = 1.0
+function eye(::Type{E}) where {E <: Number}
+	a = zerotransform(E)
+	a.m11 = one(E)
+	a.m22 = one(E)
+	a.m33 = one(E)
 	
 	return a
 end
 
 
 function Matrix3x3(pos::Point, ang::Number)
-	a = identity()
+	a = eye(Float64)
 	a.m13 = pos.x
 	a.m23 = pos.y
 	
@@ -57,24 +56,24 @@ function Matrix3x3(pos::Point, ang::Number)
 end
 
 function translate(v::Vector2D)
-	a = identity()
+	a = eye(eltype(v))
 	a.m13 = v.x
 	a.m23 = v.y
 	
 	return a
 end
 
-function scale(x::Number, y::Number)
-	a = zerotransform()
+function scale(x::T, y::T) where {T <: Number}
+	a = zerotransform(T)
 	a.m11 = x
 	a.m22 = y
-	a.m33 = 1.0
+	a.m33 = zero(T)
 	
 	return m
 end
 
 function rotate(ang::Number)
-	a = identity()
+	a = eye(Float64)
 	sine = sin(ang)
 	cosine = cos(ang)
 	
@@ -82,6 +81,8 @@ function rotate(ang::Number)
 	a.m12 = -sine
 	a.m21 = sine
 	a.m22 = cosine
+    
+    a
 end
 
 pos(a::Matrix3x3) = Point(a.m13, a.m23)

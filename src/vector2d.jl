@@ -1,4 +1,4 @@
-import Base: angle
+import Base: angle, eltype, isapprox
 
 length(v::PointVecOrDir) = 2
 norm(v::Vector2D) = sqrt(v.x^2 + v.y^2)
@@ -9,13 +9,18 @@ sqrnorm(v::Vector2D) = v.x^2 + v.y^2
 
 size(v::PointVecOrDir) = (2,)
 ndims(v::PointVecOrDir) = 1
-eltype(v::PointVecOrDir) = Number
+
+for T in [:Point, :Vector2D, :Direction]
+    @eval eltype(::Type{$T{E}}) where {E <: Number} = @isdefined(E) ? E : Any
+end
+
 
 function unit(v::Vector2D)  
 	len = norm(v);
 	Direction(v.x/len, v.y/len)
 end
 
+isapprox(u::PointVecOrDir, v::PointVecOrDir) = isapprox(u.x, v.x) && isapprox(u.y, v.y)
 dot(u::VecOrDir, v::VecOrDir) = u.x*v.x + u.y*v.y
 cross(u::VecOrDir, v::VecOrDir) = u.x*v.y - u.y*v.x
 abs(v::VecOrDir) = Vector2D(abs(v.x), abs(v.y))

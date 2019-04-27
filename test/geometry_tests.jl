@@ -9,6 +9,22 @@
         @test Vector2D(3, 4) * f == Vector2D(3*f, 4*f)
 
     end
+    
+    @testset "Matrix tests" begin
+        @testset "matrix translations" begin
+            p = Point(2, 3)
+            trans = translate(Vector2D(4, 1))
+            @test p*trans == Point(6, 4)
+        end
+        
+        @testset "matrix rotations" for i in 1:6
+            θ = π/i
+            p = Point(1, 0)
+            @test rotate(θ)*p ≈ Point(cos(θ), sin(θ))
+            @test rotate(-θ)*p ≈ Point(cos(-θ), sin(-θ))
+        end    
+    end
+    
 
     @testset "Rect tests" begin
         @testset "rect intersections" begin
@@ -59,6 +75,34 @@
             @test !isintersecting(s1, s4)  # Parallell Segmentments
             @test !isintersecting(s1, s5)  # Tangenting Segmentmen parallell
             @test !isintersecting(s1, s6)  # Parallell overlapping
+        end
+        
+        @testset "rect intersections" begin
+            # TODO: implement isintersecting with segment and rect
+            # rect = Rect(Point(0.0, 0.0), Point(2.0, 2.0))
+            #
+            # s1 = Segment(Point(1.0, -1.0), Point(1.0, 3.0)) # Across vertical
+            # s2 = Segment(Point(-1.0, 1.0), Point(3.0, 1.0)) # Across horizontal
+            # s3 = Segment(Point(-1.0, 1.0), Point(1.0, 1.0)) # Enter from left
+            # s4 = Segment(Point(1.0, 1.0), Point(3.0, 1.0))  # Enter from right
+            # s5 = Segment(Point(2.0, 1.0), Point(3.0, 2.0))  # Tangent left
+            # s6 = Segment(Point(1.0, 2.0), Point(1.5, 3.0))  # Tangtn top
+            #
+            # s7 = Segment(Point(0.5, 0.5), Point(1.5, 1.0)) # Diagonal inside
+            # s8 = Segment(Point(0.8, 0.0), Point(0.9, 1.0))    # Tagent inside
+            # s9 = Segment(Point(3.0, 3.0), Point(4.0, 4.0))    # Outside
+            # s10 = Segment(Point(-3.0, 1.0), Point(-1.0, 1.0))    # Outside
+            #
+            # @test isintersecting(s1, rect)
+            # @test isintersecting(s2, rect)
+            # @test isintersecting(s3, rect)
+            # @test isintersecting(s4, rect)
+            # @test isintersecting(s5, rect)
+            # @test isintersecting(s6, rect)
+            # @test !isintersecting(s7, rect) # Inside does not count as:intersectio
+            # @test isintersecting(s8, rect)
+            # @test !isintersecting(s9, rect)
+            # @test !isintersecting(s10, rect)    
         end
 
     end
