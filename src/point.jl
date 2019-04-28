@@ -1,4 +1,4 @@
-import Base: zero
+import Base: zero, show
 
 """
     zero(::Type{Point})
@@ -22,3 +22,7 @@ vector2D(p::Point) = Vector2D(p.x, p.y)
 
 similar(v::Point) = Point(v.x, v.y)
 copy(v::Point) = Point(v.x, v.y)
+
+function show(io::IO, p::Point)
+    print(io, "(", p.x, ", ", p.y ,")")
+end

@@ -17,7 +17,8 @@ the position and velocity of the `body` by advancing the time with `Δt`
 """
 function explicit_euler!(body::RigidBody{T}, Δt::Number) where T <: Number
     body.position += body.velocity * Δt
-    body.velocity += body.acceleration * Δt
+    body.velocity += acceleration(body) * Δt
+    body
 end
 
 """
@@ -26,8 +27,9 @@ Perform one integration step using the semi implicit euler method. This will upd
 the position and velocity of the `body` by advancing the time with `Δt`
 """
 function semi_implicit_euler!(body::RigidBody{T}, Δt::Number) where T <: Number
-    body.velocity += body.acceleration * Δt
+    body.velocity += acceleration(body) * Δt
     body.position += body.velocity * Δt
+    body
 end
 
 # Set the default function for integrating position and volocity of a physics body

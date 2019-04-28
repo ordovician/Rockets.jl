@@ -1,4 +1,7 @@
-import Base: angle, eltype, isapprox
+import Base: angle, eltype, isapprox, zero, show
+
+zero(::Type{Vector2D{T}}) where T <: Number = Vector2D{T}(zero(T), zero(T))
+zero(v::Vector2D{T})      where T <: Number = zero(typeof(v))
 
 length(v::PointVecOrDir) = 2
 norm(v::Vector2D) = sqrt(v.x^2 + v.y^2)
@@ -42,3 +45,7 @@ point(v::Vector2D) = Point(v.x, v.y)
 
 similar(v::Vector2D) = Vector2D(v.x, v.y)
 copy(v::Vector2D) = Vector2D(v.x, v.y)
+
+function show(io::IO, v::VecOrDir)
+    print(io, "[", v.x, ", ", v.y ,"]")
+end
