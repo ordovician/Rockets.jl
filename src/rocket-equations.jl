@@ -25,14 +25,14 @@ is simply defined under earth conditions.
 exhaust_velocity(Isp::Number) =  Isp * g₀
 
 """
-    rocket_equation(vₑ, m₀, mf)
+    delta_velocity(vₑ, m₀, mf)
 Tsiolkovsky rocket equation, for calculating `Δv`, the maxiumum change in velocity for
 a rocket with total initial mass of `m₀`, and final mass of `mf`. The mass of the propellant is thus `m₀ - mf`.
 
 Usually you are not given the exhaust velocity of the the propellant. So Calulation would be:
 
     vₑ = exhaust_velocity(282)
-    Δv = rocket_equation(vₑ, m₀, mf)
+    Δv = delta_velocity(vₑ, m₀, mf)
 """
 delta_velocity(vₑ::Number, m₀::Number, mf::Number) = vₑ*log(m₀/mf)
 
@@ -56,7 +56,7 @@ Get mass flow in Kg/s of propellant for an engine with given `thrust` and specif
     engine_thrust = 0.845e6            # Newton
     Isp           = 282                # Specific impulse in seconds
     thrust    = engine_thrust * 9      # There are 9 merlin engines on Falcon 9
-    mflow1 = mass_flow(thrust, Isp)    # Total mass flow in rocket. Kg/s
+    mflow1  = mass_flow(thrust, Isp)    # Total mass flow in rocket. Kg/s
 
     # Should get similar result from using burn time and total propellant
     burn_time = 162          # Number of seconds first stage engines will burn

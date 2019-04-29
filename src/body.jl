@@ -28,7 +28,7 @@ acceleration(body::RigidBody) = force(body) / mass(body)
 
 "Add the effects of gravity to the accumulated force working on the body"
 function gravity_force(mass::AbstractFloat)
-    Vector2D(zero(mass), typeof(mass)(-9.8) * mass)
+    Vector2D(zero(mass), typeof(mass)(-g₀) * mass)
 end
 
 function show(io::IO, b::RigidBody)
