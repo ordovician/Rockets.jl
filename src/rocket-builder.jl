@@ -4,6 +4,8 @@ import Base: getindex
 
 export load_rocket_engines, load_propellant_tanks
 
+const mass_multiplier = 1000 # reading masses in tons but want to store them in Kg
+
 """
     load_rocket_engines()
 Loads rocket engine definition stored in CSV file, and creates and array of
@@ -28,7 +30,7 @@ function load_rocket_engines()
             Isp = row[:Isp_Vac]
         end
         
-        mass = row[:mass]
+        mass = row[:mass] * mass_multiplier
         if ismissing(mass)
             continue
         end
@@ -62,8 +64,8 @@ function load_propellant_tanks()
     for row in eachrow(tanks_table)
         if any(ismissing, row) continue end
         name = row[:name]
-        total_mass = row[:total_mass]
-        dry_mass   = row[:dry_mass]
+        total_mass = row[:total_mass] * mass_multiplier # Given in tons in the file
+        dry_mass   = row[:dry_mass]   * mass_multiplier
         tanks[name] = PropellantTank(dry_mass, total_mass, 0.0)
     end
     tanks
