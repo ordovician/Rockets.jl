@@ -8,7 +8,7 @@ Represents a physics body with a position, velocity and mass onto which a force
 acts to change its acceleration.
 """
 mutable struct RigidBody{T <: AbstractFloat}
-    position::Point{T}    # Postion, with x,y coordinates in meters
+    position::Point2D{T}    # Postion, with x,y coordinates in meters
     velocity::Vector2D{T} # Current velocity in m/s
     force::Vector2D{T}    # Accumulated force acting upon body in Newton
     orientation::T        # In radians
@@ -19,7 +19,7 @@ function RigidBody(mass::AbstractFloat, force::AbstractFloat)
     mass, force = promote(mass, force)
     z = zero(mass)
     zerovec = Vector2D(z, z)
-    RigidBody(Point(z, z), Vector2D(z, z), Vector2D(force, z), z, mass)
+    RigidBody(Point2D(z, z), Vector2D(z, z), Vector2D(force, z), z, mass)
 end
 
 force(body::RigidBody) = body.force

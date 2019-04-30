@@ -2,17 +2,17 @@ export  Rect, isinside, isintersecting, transform, boundingbox,
         center, size, halfsize, topleft, bottomright, topright, surround, translate
 
 struct Rect{T}
-	min::Point{T}
-	max::Point{T}
+	min::Point2D{T}
+	max::Point2D{T}
 end
 
-Rect(minx::Number, miny::Number, maxx::Number, maxy::Number) = Rect(Point(minx, miny), Point(maxx, maxy))
+Rect(minx::Number, miny::Number, maxx::Number, maxy::Number) = Rect(Point2D(minx, miny), Point2D(maxx, maxy))
 
-center(r::Rect) = Point((r.max.x + r.min.x) * 0.5, (r.max.y + r.min.y) * 0.5)
+center(r::Rect) = Point2D((r.max.x + r.min.x) * 0.5, (r.max.y + r.min.y) * 0.5)
 size(r::Rect) = abs(r.max - r.min)
 halfsize(r::Rect) = 0.5 * size(r)
 
-function isinside(r::Rect, p::Point)
+function isinside(r::Rect, p::Point2D)
 	ismin(r.min, p) && ismax(r.max, p) ||
 		pos == r.min || pos == r.max 
 end
@@ -31,9 +31,9 @@ bottomright(r::Rect) = Vector2D(r.max.x, r.min.y)
 topright(r::Rect)    = r.max
 bottomleft(r::Rect)  = r.min
 
-transform(r::Rect, m::Matrix3x3) = Rect(m * r.min, m * r.max)
+transform(r::Rect, m::Matrix2D) = Rect(m * r.min, m * r.max)
 
-surround(r::Rect, p::Point) = Rect(mincomp(r.min, p), maxcomp(r.max, p))
+surround(r::Rect, p::Point2D) = Rect(mincomp(r.min, p), maxcomp(r.max, p))
 surround(r::Rect, s::Rect) = Rect(mincomp(r.min, s.min), maxcomp(r.max, s.max))
 boundingbox(r::Rect) = r
 

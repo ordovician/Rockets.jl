@@ -1,19 +1,19 @@
 import Base: size, IndexStyle, setindex!, getindex, transpose
 
-export  Matrix3x3, zerotransform, eye, rotate, scale, transpose, 
+export  Matrix2D, zerotransform, eye, rotate, scale, transpose, 
         location, direction, xloc, yloc
 
-mutable struct Matrix3x3{T <: Number} <: AbstractArray{T, 2}
+mutable struct Matrix2D{T <: Number} <: AbstractArray{T, 2}
     m::Matrix{T}
 end
 
-size(M::Matrix3x3) = size(M.m)
-IndexStyle(::Type{<:Matrix3x3}) = IndexLinear()
+size(M::Matrix2D) = size(M.m)
+IndexStyle(::Type{<:Matrix2D}) = IndexLinear()
 
-setindex!(M::Matrix3x3, v::Number, I::Vararg{Int,2}) = M.m[I...] = v
-getindex(M::Matrix3x3, i::Int) = M.m[i]
+setindex!(M::Matrix2D, v::Number, I::Vararg{Int,2}) = M.m[I...] = v
+getindex(M::Matrix2D, i::Int) = M.m[i]
 
-zerotransform(::Type{E}) where {E <: Number} = Matrix3x3(zeros(E, 3, 3))
+zerotransform(::Type{E}) where {E <: Number} = Matrix2D(zeros(E, 3, 3))
 
 function eye(::Type{E}) where {E <: Number}
 	a = zerotransform(E)
@@ -25,7 +25,7 @@ function eye(::Type{E}) where {E <: Number}
 end
 
 
-function Matrix3x3(pos::Point, ang::Number)
+function Matrix2D(pos::Point2D, ang::Number)
 	a = eye(Float64)
 	a.m[1, 3] = pos.x
 	a.m[2, 3] = pos.y
@@ -71,15 +71,15 @@ function rotate(ang::Number)
     a
 end
 
-location(a::Matrix3x3) = Point(a.m[1, 3], a.m[2, 3])
-direction(a::Matrix3x3) = Vector2D(a.m[1, 1], a.m[2, 1])
-xloc(a::Matrix3x3) = a.m[1, 3]
-yloc(a::Matrix3x3) = a.m[2, 3]
+location(a::Matrix2D) = Point2D(a.m[1, 3], a.m[2, 3])
+direction(a::Matrix2D) = Vector2D(a.m[1, 1], a.m[2, 1])
+xloc(a::Matrix2D) = a.m[1, 3]
+yloc(a::Matrix2D) = a.m[2, 3]
   
 
-function *(a::Matrix3x3, b::Matrix3x3)
+function *(a::Matrix2D, b::Matrix2D)
     T = promote_type(eltype(a), eltype(b))
-    c = Matrix3x3(Matrix{T}(undef, 3, 3))
+    c = Matrix2D(Matrix{T}(undef, 3, 3))
     for i in 1:3, j in 1:3
         sum = zero(T)
         for k in 1:3
@@ -90,24 +90,24 @@ function *(a::Matrix3x3, b::Matrix3x3)
     c
 end
 
-function *(a::Matrix3x3, v::Point)
-	Point(v.x*a.m[1, 1] + v.y*a.m[1, 2] + a.m[1, 3],
+function *(a::Matrix2D, v::Point2D)
+	Point2D(v.x*a.m[1, 1] + v.y*a.m[1, 2] + a.m[1, 3],
 		  v.x*a.m[2, 1] + v.y*a.m[2, 2] + a.m[2, 3])
 end
 
-*(v::Point, a::Matrix3x3) = a * v
+*(v::Point2D, a::Matrix2D) = a * v
 
-function *(a::Matrix3x3, v::Vector2D)
+function *(a::Matrix2D, v::Vector2D)
 	Vector2D(v.x*a.m[1, 1] + v.y*a.m[1, 2], 
 			 v.x*a.m[2, 1] + v.y*a.m[2, 2])
 end
 
-*(v::Vector2D, a::Matrix3x3) = a * v
+*(v::Vector2D, a::Matrix2D) = a * v
 
 
-function transpose(a::Matrix3x3)
+function transpose(a::Matrix2D)
     data = Matrix{eltype(a)}(undef, 3, 3)
-	t = Matrix3x3(data)
+	t = Matrix2D(data)
     
     for i in 1:3, j in 1:3
        t.m[i, j] = a.m[j, i] 

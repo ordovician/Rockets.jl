@@ -1,24 +1,24 @@
 export Segment, isbelow, ison, isonend, tovector, intersection, isintersecting, intersection2
 
 struct Segment{T <: Number}
-	source::Point{T}
-	target::Point{T}
+	source::Point2D{T}
+	target::Point2D{T}
 end
 
 min(s::Segment) = min(s.source, s.target)
 
-function pointplacement(s::Segment, p::Point)
+function pointplacement(s::Segment, p::Point2D)
 	smin = min(s)
 	cross(max(s) - smin, p - smin)
 end
 
 # true if point p is below line defined by segment
-isabove(s::Segment, p::Point) = pointplacement(s, p) < 0
+isabove(s::Segment, p::Point2D) = pointplacement(s, p) < 0
 
 # true if point p is above line defined by segment
-isbelow(s::Segment, p::Point) = pointplacement(s, p) > 0
-ison(s::Segment, p::Point)    = pointplacement(s, p) == 0
-isonend(s::Segment, p::Point) = p == s.source || p == s.target
+isbelow(s::Segment, p::Point2D) = pointplacement(s, p) > 0
+ison(s::Segment, p::Point2D)    = pointplacement(s, p) == 0
+isonend(s::Segment, p::Point2D) = p == s.source || p == s.target
 tovector(s::Segment) = s.target - s.source
 
 """

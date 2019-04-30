@@ -1,11 +1,11 @@
 export Circle, isinside, isintersecting, transform, boundingbox
 
 struct Circle{T <: Number}
-	center::Point{T}
+	center::Point2D{T}
 	radius::T
 end
 
-isinside(c::Circle, p::Point) = norm(p - c.center) < c.radius
+isinside(c::Circle, p::Point2D) = norm(p - c.center) < c.radius
 isintersecting(c::Circle, k::Circle) = norm(k.center - c.center) < c.radius + k.radius
 
 function isintersecting(c::Circle, r::Rect)
@@ -46,7 +46,7 @@ function isintersecting(c::Circle, r::Rect)
 end
 
 isintersecting(r::Rect, c::Circle) = isintersecting(c, r)
-transform(c::Circle, m::Matrix3x3) = Circle(m * c.center, c.radius)
+transform(c::Circle, m::Matrix2D) = Circle(m * c.center, c.radius)
 
 function boundingbox(c::Circle)
     Rect(c.center - Vector2D(c.radius, c.radius), c.center + Vector2D(c.radius, c.radius))

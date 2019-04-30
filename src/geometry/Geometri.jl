@@ -1,7 +1,7 @@
 import Base: length, abs, +, -, *, /, ==, !=, 
 			 size, ndims, eltype, similar, min, max
 
-export 	Point, ismin, ismax,
+export 	Point2D, ismin, ismax,
 		Vector2D, dot, cross, ⋅, ×,
 		sqrnorm, 
 		unit, 
@@ -9,12 +9,12 @@ export 	Point, ismin, ismax,
 		angle
         
 
-struct Point{T <: Number}
+struct Point2D{T <: Number}
 	x::Number
 	y::Number
 end
 
-Point(x::T, y::T) where T <: Number = Point{T}(x, y)
+Point2D(x::T, y::T) where T <: Number = Point2D{T}(x, y)
 
 struct Vector2D{T <: Number}
 	x::Number
@@ -23,17 +23,17 @@ end
 
 Vector2D(x::T, y::T) where T <: Number = Vector2D{T}(x, y)
 
-struct Direction{T <: Number}
+struct Direction2D{T <: Number}
 	x::Number
 	y::Number
 end
 
-Direction(x::T, y::T) where T <: Number = Direction{T}(x, y)
+Direction2D(x::T, y::T) where T <: Number = Direction2D{T}(x, y)
 
 
-VecOrDir      = Union{Vector2D, Direction}
-PointVecOrDir = Union{Vector2D, Direction, Point}
-PointOrVec    = Union{Vector2D, Point}
+VecOrDir      = Union{Vector2D, Direction2D}
+PointVecOrDir = Union{Vector2D, Direction2D, Point2D}
+PointOrVec    = Union{Vector2D, Point2D}
 
 include("point.jl")
 include("vector2d.jl")
