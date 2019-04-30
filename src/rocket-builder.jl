@@ -1,7 +1,8 @@
 import CSV
 import DataFrames: eachrow, ismissing
+import Base: getindex
 
-export load_rocket_engines
+export load_rocket_engines, load_propellant_tanks
 
 """
     load_rocket_engines()
@@ -36,6 +37,23 @@ function load_rocket_engines()
         push!(rocket_engines, engine)
     end
     rocket_engines
+end
+
+"""
+	getindex(engines::Array{RocketEngine}, key)
+Gives a dictionary style interface to an array of rocket engines, so we can conveniently lookup an engine
+based on a name.
+
+## Example
+	engines = load_rocket_engines()
+	kestrel = engines["Kestrel 2"]
+"""
+function getindex(engines::Array{RocketEngine}, key::AbstractString)
+   i = findfirst(e -> e.name == key, engines)
+   if i == nothing
+       throw(KeyError(key))
+   end
+   engines[i]
 end
 
 function load_propellant_tanks()
