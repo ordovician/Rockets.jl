@@ -1,4 +1,4 @@
-import Base: zero, show
+import Base: zero, show, copy
 
 """
     zero(::Type{Point2D})

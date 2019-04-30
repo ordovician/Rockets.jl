@@ -1,4 +1,4 @@
-import Base: angle, eltype, isapprox, zero, show
+import Base: angle, eltype, isapprox, zero, show, copy
 
 zero(::Type{Vector2D{T}}) where T <: Number = Vector2D{T}(zero(T), zero(T))
 zero(v::Vector2D{T})      where T <: Number = zero(typeof(v))

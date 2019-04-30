@@ -4,7 +4,8 @@ import Base: getindex
 
 export load_rocket_engines, load_propellant_tanks
 
-const mass_multiplier = 1000 # reading masses in tons but want to store them in Kg
+const mass_multiplier = 1 # reading masses in tons but want to store them in Kg. However thrust in kN
+						  # so it should even out
 
 """
     load_rocket_engines()

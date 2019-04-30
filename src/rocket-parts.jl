@@ -1,10 +1,11 @@
-import Base: getproperty
+import Base: getproperty, copy
 
 export RocketEngine, PropellantTank, Capsule, Sattelite,
        Booster, SingleBooster, MultiBooster,
-       mass, force, update!
+       mass, force, update!,
+	   Capsule, Sattelite
 
-mutable struct RocketEngine
+struct RocketEngine
     name::String
     mass::Float64
     max_thrust::Float64
@@ -30,11 +31,11 @@ abstract type Booster end
 Heat shield below and typically no rocket engines or fuel tanks
 """
 mutable struct Capsule <: Payload
-
+	mass::Float64
 end
 
 mutable struct Sattelite <: Payload
-
+	mass::Float64
 end
 
 mutable struct  SingleBooster <: Booster
@@ -43,6 +44,11 @@ mutable struct  SingleBooster <: Booster
     no_engines::Int64
     no_active_engines::Int64
     throttle::Float64
+end
+
+"Creates a booster where all engines are on at full throttle"
+function SingleBooster(tank::PropellantTank, engine::RocketEngine, no_engines::Integer)
+	SingleBooster(tank, engine, no_engines, no_engines, 1.0)
 end
 
 mutable struct  MultiBooster <: Booster
@@ -76,12 +82,33 @@ function mass(tank::PropellantTank)
     tank.dry_mass + tank.propellant_mass
 end
 
-########### Capsule #############################################################################
-mass(capsule::Capsule) = mass(capsule.body)
+"""
+	fulltank!(tank::PropellantTank)
+Refills the tank to full.
+"""
+function fulltank!(tank::PropellantTank)
+	tank.propellant_mass = tank.total_mass - tank.dry_mass
+end
 
+function copy(tank::PropellantTank)
+	PropellantTank(tank.dry_mass, tank.total_mass, tank.propellant_mass)
+end
+
+########### Payload #########################################################################
+mass(payload::Payload)  = error("mass not defined for ", typeof(payload))
+force(payload::Payload) = 0.0
+
+fulltank!(payload::Payload) = nothing
+
+
+########### Capsule #########################################################################
+mass(capsule::Capsule) = capsule.mass
+
+########### Sattelite #######################################################################
+mass(sattelite::Sattelite) = sattelite.mass
 
 ########### SingleBooster ###################################################################
-mass(b::SingleBooster) = mass(b.tanks) + mass(b.engine)*b.no_engines
+mass(b::SingleBooster) = mass(b.tank) + mass(b.engine)*b.no_engines
 
 function thrust(b::SingleBooster)
     @assert b.no_active_engines <= b.no_engines "Can't have more active engines than there are engines"
@@ -99,6 +126,7 @@ function update!(b::SingleBooster, t::Number, Δt::Number)
     end
 end
 
+fulltank!(b::SingleBooster) = fulltank!(b.tank)
 
 ########### MultiBooster ###################################################################
 mass( b::MultiBooster) = sum(mass.(b.boosters))
@@ -117,3 +145,10 @@ function update!(b::MultiBooster, t::Number, Δt::Number)
         update!(booster, t, Δt)
     end
 end
+
+function fulltank!(b::MultiBooster)
+    for booster in b.boosters
+        fulltank!(booster)
+    end
+end
+

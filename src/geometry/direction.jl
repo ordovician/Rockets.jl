@@ -1,3 +1,5 @@
+import Base: copy
+
 norm(v::Direction2D{T})    where T <: Number = one(T)
 sqrnorm(v::Direction2D{T}) where T <: Number = one(T)
 unit(v::Direction2D) = v  

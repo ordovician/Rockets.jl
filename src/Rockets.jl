@@ -9,8 +9,9 @@ include("physics/Fysikk.jl")
 include("rocket-equations.jl")
 include("transform.jl")
 include("rocket-parts.jl")
+include("rocket.jl")
 include("rocket-builder.jl")
-# include("simulator.jl")
+include("simulator.jl")
 include("plotting.jl")
 
 end # module
