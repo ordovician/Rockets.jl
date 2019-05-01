@@ -1,7 +1,8 @@
 import 	Base: position
 
 export  Rocket, Stage,
-        mass, force, update!, stage_separate!
+        mass, force, update!, stage_separate!,
+        fulltank!
 
 mutable struct Rocket
 	active_stage::Payload
@@ -26,10 +27,7 @@ mass( s::Stage) = mass(s.payload) + mass(s.booster)
 force(s::Stage) = force(s.booster)
 
 update!(s::Stage, t::Number, Δt::Number) = update!(s.booster, t, Δt)
-function fulltank!(s::Stage)
-	fulltank!(s.booster)	
-	fulltank!(s.payload)
-end
+propellant_mass(s::Stage) = propellant_mass(s.booster)
 
 ########### Rocket ###################################################################
 function Rocket(stage::Stage)
@@ -41,8 +39,7 @@ position(r::Rocket) = r.body.position
 
 mass( r::Rocket) = mass(r.active_stage)
 force(r::Rocket) = force(r.active_stage)
-fulltank!(r::Rocket) = fulltank!(r.active_stage)
-
+ 
 """
 	update!(r::Rocket, t::Number, Δt::Number)
 Perform a time step. At time `t` advance the time with `Δt` and update the mass, force, acceleration,

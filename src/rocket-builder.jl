@@ -4,8 +4,9 @@ import Base: getindex
 
 export load_rocket_engines, load_propellant_tanks
 
-const mass_multiplier = 1 # reading masses in tons but want to store them in Kg. However thrust in kN
+const mass_multiplier = 1000 # reading masses in tons but want to store them in Kg. However thrust in kN
 						  # so it should even out
+const thrust_multiplier = mass_multiplier
 
 """
     load_rocket_engines()
@@ -21,9 +22,9 @@ function load_rocket_engines()
             throttle = 1.0
         end
         
-        thrust = row[:thrust_SL]
+        thrust = row[:thrust_SL] * thrust_multiplier
         if ismissing(thrust)
-            thrust = row[:thrust_Vac]
+            thrust = row[:thrust_Vac] * thrust_multiplier
         end
         
         Isp = row[:Isp_SL]

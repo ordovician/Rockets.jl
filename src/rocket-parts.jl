@@ -98,14 +98,14 @@ end
 mass(payload::Payload)  = error("mass not defined for ", typeof(payload))
 force(payload::Payload) = 0.0
 
-fulltank!(payload::Payload) = nothing
-
-
 ########### Capsule #########################################################################
 mass(capsule::Capsule) = capsule.mass
 
 ########### Sattelite #######################################################################
 mass(sattelite::Sattelite) = sattelite.mass
+
+########### Booster #########################################################################
+propellant_mass(b)  = error("propellant_mass not defined for ", typeof(b))
 
 ########### SingleBooster ###################################################################
 mass(b::SingleBooster) = mass(b.tank) + mass(b.engine)*b.no_engines
@@ -126,7 +126,7 @@ function update!(b::SingleBooster, t::Number, Δt::Number)
     end
 end
 
-fulltank!(b::SingleBooster) = fulltank!(b.tank)
+propellant_mass(b::SingleBooster) = b.tank.propellant_mass
 
 ########### MultiBooster ###################################################################
 mass( b::MultiBooster) = sum(mass.(b.boosters))
@@ -146,9 +146,4 @@ function update!(b::MultiBooster, t::Number, Δt::Number)
     end
 end
 
-function fulltank!(b::MultiBooster)
-    for booster in b.boosters
-        fulltank!(booster)
-    end
-end
-
+propellant_mass(multi::MultiBooster) = sum([propellant_mass(b.tank) in multi.booster])
