@@ -109,6 +109,7 @@ end
 ########### Payload #########################################################################
 mass(payload::Payload)  = error("mass not defined for ", typeof(payload))
 force(payload::Payload) = 0.0
+copy(payload) = payload # assume payload is immutable
 
 ########### Capsule #########################################################################
 mass(capsule::Capsule) = capsule.mass
@@ -136,6 +137,11 @@ function update!(b::SingleBooster, t::Number, Δt::Number)
 end
 
 propellant_mass(b::SingleBooster) = b.tank.propellant_mass
+
+function copy(b::SingleBooster)
+    # don't need to copy engine as it cannot be mutated.
+    SingleBooster(copy(b.tank), b.engine, b.no_engines, b.no_active_engines, b.throttle)
+end
 
 ########### MultiBooster ###################################################################
 mass( b::MultiBooster)  = sum(mass.(b.boosters))

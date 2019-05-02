@@ -51,12 +51,10 @@
 		gravity = false  # Our Δv calculations above using the rocket equation 
 						 # does not take gravity into account
 		rocket  = Rocket(stage, gravity)
-		Δt = 0.1		
 		Δerror = Float64[]           # Approximations to Δv for different values of Δt, when 
 									 # using integration 
 		for Δt in [0.01, 0.1, 0.5, 1.0]
-			push!(Δerror, delta_velocity!(rocket, Δt).y - Δv) 
-			reset!(rocket)
+			push!(Δerror, delta_velocity(rocket, Δt).y - Δv) 
 		end
 		# As we make time increments larger, the error should increase
 		@test Δerror == sort(Δerror)
@@ -113,12 +111,10 @@
 		gravity  = false  # Our Δv calculations above using the rocket equation 
 						 # does not take gravity into account
 		rocket  = Rocket(stage1, gravity)
-		Δt      = 0.1		
 		Δerror  = Float64[]   # Approximations to Δv for different values of Δt, when 
 							  # using integration 
 		for Δt in [0.01, 0.1, 0.5, 1.0]
-			push!(Δerror, delta_velocity!(rocket, Δt).y - Δv) 
-			reset!(rocket)
+			push!(Δerror, delta_velocity(rocket, Δt).y - Δv) 
 		end
 		# As we make time increments larger, the error should increase
 		@test Δerror == sort(Δerror)

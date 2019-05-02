@@ -1,8 +1,8 @@
-import 	Base: position
+import 	Base: position, copy
 
 export  Rocket, Stage,
         mass, force, update!, stage_separate!,
-        fulltank!, reset!, delta_velocity!,
+        fulltank!, delta_velocity,
 		propellant_mass
 
 
@@ -46,23 +46,15 @@ function stage_separate!(r::Rocket)
 	end
 end
 
+copy(s::Stage) = Stage(copy(s.payload), copy(s.booster))
+
 ########### Rocket ###################################################################
 function Rocket(stage::Stage, gravity::Bool = true)
 	body = RigidBody(mass(stage), 0.0)
 	Rocket(stage, body, gravity)
 end
 
-"""
-	reset!(r::Rocket)
-After you have simulated a launch of a rocket `r`, you can use `reset(r)` to essentially put the rocket
-back on the launch pad, with zero velocity and full tanks, ready for another simulated launch.
-"""
-function reset!(r::Rocket)
-	reset!(r.body)
-	fulltank!(r)
-	r.body.mass = mass(r)
-	r
-end
+copy(r::Rocket) = Rocket(copy(r.active_stage), copy(r.body), r.gravity)
 
 position(r::Rocket) = r.body.position
 velocity(r::Rocket) = r.body.velocity
@@ -92,18 +84,19 @@ end
 propellant_mass(r::Rocket) = propellant_mass(r.active_stage)
 
 """
-	delta_velocity!(rocket, Δt)
+	delta_velocity(rocket, Δt)
 Calculate Δv of rocket using integration as opposed to using Tsiolkovsky rocket equation.
-This will mutate the state of the rocket objec.
+It copies the `rocket` object, so it never gets mutated.
 """
-function delta_velocity!(rocket::Rocket, Δt::Number)
+function delta_velocity(rocket::Rocket, Δt::Number)
 	t = 0
-	while rocket.active_stage isa Stage
-		while propellant_mass(rocket) > 0
-			update!(rocket, t, Δt)
+    r = copy(rocket)
+	while r.active_stage isa Stage
+		while propellant_mass(r) > 0
+			update!(r, t, Δt)
 			t += Δt
 		end
-		stage_separate!(rocket)
+		stage_separate!(r)
 	end
-	velocity(rocket)
+	velocity(r)
 end
