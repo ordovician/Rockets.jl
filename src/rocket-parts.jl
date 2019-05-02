@@ -5,25 +5,32 @@ export RocketEngine, PropellantTank, Capsule, Sattelite,
        mass, force, update!,
 	   Capsule, Sattelite
 
+"""
+Keeps track of information needed to calculate the thrust a rocket performs, as well as how much
+it weighs. The weight of the rocket engines is an imporant part of the total weight of the rocket.
+"""
 struct RocketEngine
-    name::String
-    mass::Float64
-    max_thrust::Float64
-    min_throttle::Float64
-    Isp::Float64    
+    name::String			# An identifier such as Merlin 1D, RD-180
+    mass::Float64			# Mass of rocket engine in Kg
+    max_thrust::Float64		# Max amount of thrust engine can produce, measured in Newton.
+    min_throttle::Float64	# Minimum amount engine can be throttled down, before it has to be shut down entirely
+    Isp::Float64    		# Specific Impulse. A measure of propellant efficiency of engine.
 end
 
 mutable struct PropellantTank
-   dry_mass::Float64
-   total_mass::Float64
-   propellant_mass::Float64 
+   dry_mass::Float64			# Mass of tank without propellant
+   total_mass::Float64			# Mass of tank with propellant
+   propellant_mass::Float64 	# Between 0 and total_mass - dry_mass	
 end
 
+"""
+Anything a stage pushes into the air/space with its booster. Could be e.g. a sattelite or another rocket stage
+"""
 abstract type Payload end
 
 """
-    A booster is the bottom stage of a rocket, containing fuel tanks and rocket engines.
-    A booster push a payload up from the ground.
+A booster is the bottom stage of a rocket, containing fuel tanks and rocket engines.
+A booster push a payload up from the ground.
 """
 abstract type Booster end
 
@@ -41,9 +48,9 @@ end
 mutable struct  SingleBooster <: Booster
     tank::PropellantTank
     engine::RocketEngine
-    no_engines::Int64
-    no_active_engines::Int64
-    throttle::Float64
+    no_engines::Int64				# Number of engines on this booster. E.g. 9 engines on Falcon 9 first stage
+    no_active_engines::Int64		# Engines turned on. E.g. when Falcon 9 lands, only one engine is active.
+    throttle::Float64				# Either 0 or in range (min_throttle, 1)
 end
 
 "Creates a booster where all engines are on at full throttle"
@@ -51,6 +58,11 @@ function SingleBooster(tank::PropellantTank, engine::RocketEngine, no_engines::I
 	SingleBooster(tank, engine, no_engines, no_engines, 1.0)
 end
 
+"""
+Side boosters, such as the solid propellant first stage boosters on the Space Shuttle. Use this
+when  you got boosters which are treated as one unit. E.g. the side boosters will fire at the same time, and
+get stage separated at the same time.
+"""
 mutable struct  MultiBooster <: Booster
     boosters::Array{SingleBooster}
 end
@@ -105,7 +117,7 @@ mass(capsule::Capsule) = capsule.mass
 mass(sattelite::Sattelite) = sattelite.mass
 
 ########### Booster #########################################################################
-propellant_mass(b)  = error("propellant_mass not defined for ", typeof(b))
+propellant_mass(b)  = 0.0
 
 ########### SingleBooster ###################################################################
 mass(b::SingleBooster) = mass(b.tank) + mass(b.engine)*b.no_engines
@@ -121,16 +133,13 @@ force(b::Booster) = thrust(b)
 function update!(b::SingleBooster, t::Number, Δt::Number)
     mflow = mass_flow(thrust(b), b.engine.Isp)
     b.tank.propellant_mass -= min(mflow * Δt, b.tank.propellant_mass)
-    if b.tank.propellant_mass == 0
-        b.no_active_engines = 0
-    end
 end
 
 propellant_mass(b::SingleBooster) = b.tank.propellant_mass
 
 ########### MultiBooster ###################################################################
-mass( b::MultiBooster) = sum(mass.(b.boosters))
-force(b::MultiBooster) = sum(force.(b.boosters))
+mass( b::MultiBooster)  = sum(mass.(b.boosters))
+thrust(b::MultiBooster) = sum(force.(b.boosters))
 
 """
     update!(r::MultiBooster, t, Δt)
