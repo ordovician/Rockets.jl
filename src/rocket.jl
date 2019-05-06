@@ -2,7 +2,7 @@ import 	Base: position, copy
 
 export  Rocket, Stage,
         mass, force, update!, stage_separate!,
-        fulltank!, delta_velocity,
+        fulltank!, delta_velocity, simulate_launch,
 		propellant_mass
 
 
@@ -84,11 +84,10 @@ end
 propellant_mass(r::Rocket) = propellant_mass(r.active_stage)
 
 """
-	delta_velocity(rocket, Δt)
-Calculate Δv of rocket using integration as opposed to using Tsiolkovsky rocket equation.
-It copies the `rocket` object, so it never gets mutated.
+	simulate_launch(rocket, Δt)
+Returns a rocket object giving all state after all fuel is spent.
 """
-function delta_velocity(rocket::Rocket, Δt::Number)
+function simulate_launch(rocket::Rocket, Δt::Number)
 	t = 0
     r = copy(rocket)
 	while r.active_stage isa Stage
@@ -98,5 +97,15 @@ function delta_velocity(rocket::Rocket, Δt::Number)
 		end
 		stage_separate!(r)
 	end
+    r    
+end
+
+"""
+	delta_velocity(rocket, Δt)
+Calculate Δv of rocket using integration as opposed to using Tsiolkovsky rocket equation.
+It copies the `rocket` object, so it never gets mutated.
+"""
+function delta_velocity(rocket::Rocket, Δt::Number)
+    r = simulate_launch(rocket, Δt)
 	velocity(r)
 end

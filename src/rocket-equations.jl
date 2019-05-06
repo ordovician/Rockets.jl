@@ -1,5 +1,6 @@
 export g₀,
-       exhaust_velocity, delta_velocity, rocket_thrust, mass_flow
+       exhaust_velocity, delta_velocity, rocket_thrust, mass_flow,
+       burn_length, propellant_consumption
 # These are equations related to rocketry from Tsiolkovsky rocket equation
 #  https://en.wikipedia.org/wiki/Tsiolkovsky_rocket_equation
 
@@ -56,7 +57,7 @@ Get mass flow in Kg/s of propellant for an engine with given `thrust` and specif
     engine_thrust = 0.845e6            # Newton
     Isp           = 282                # Specific impulse in seconds
     thrust    = engine_thrust * 9      # There are 9 merlin engines on Falcon 9
-    mflow1  = mass_flow(thrust, Isp)    # Total mass flow in rocket. Kg/s
+    mflow1  = mass_flow(thrust, Isp)   # Total mass flow in rocket. Kg/s
 
     # Should get similar result from using burn time and total propellant
     burn_time = 162          # Number of seconds first stage engines will burn
@@ -64,3 +65,53 @@ Get mass flow in Kg/s of propellant for an engine with given `thrust` and specif
     mflow2 = propellant_mass / burn_time 
 """
 mass_flow(thrust::Number, Isp::Number) = thrust / (Isp * g₀)
+
+# Equations and examples below obtained from http://www.alternatewars.com/BBOW/Space/Rocket_Equations.htm
+
+"""
+    burn_length(Δv, m₀, thrust, vₑ)
+    
+This should not be mistaken for **burn time**, which is how long engine will burn with a given amount
+of propellant. Instead this is solving the problem: Say you are in an orbit 
+and need to perform an orbital maneuver to land on the moon. You know the `Δv` required to do this.
+
+However you don't know the time you need to fire your engines (the **burn length**) to accomplish this.
+A heavier craft will naturally require longer time to change the velocity of, so initial mass `m₀` is
+an important input. A more powerful engine will get you up to speed faster, so `thrust` matters as well.
+
+`vₑ` is the exhaust velocity. It is related to efficiency of engine. 
+
+## Example
+
+    # Calculating  Apollo 11 CSM Columbia is executing her 
+    # Trans-Earth-Injection (TEI) Burn to return to earth with
+    # the following key parameters:
+    Δv = 999.444    # m/s
+    m₀ = 16_767.35  # mass of spacecraft in kg
+    thrust = 91_200 # Newton
+    Isp = 314
+    vₑ = exhaust_velocity(Isp)
+    
+    # Gives 156.9 secs, close to 151.4 secs used by Apollo 11 to return to earth
+    ΔT = burn_length(Δv, m₀, thrust, vₑ)
+"""
+burn_length(Δv::Number, m₀::Number, thrust::Number, vₑ::Number) =  (1 - exp(-Δv/vₑ))*m₀*vₑ/thrust
+
+"""
+    propellant_consumption(Δv, m₀, vₑ)
+Computes the amount of propellant consumed in a burn. Given that a space craft of
+initial mass `m₀` wants to perform an orbital maneuver requiring at delta-v of `Δv`, we need to know
+the exhaust velocity `vₑ` of its engine to calculate propellant consumed.
+
+## Example
+
+     # Calculating propellant consumed by Apollo 11 CSM
+     Δv = 999.444    # m/s
+     m₀ = 16_767.35  # mass of spacecraft in kg
+     Isp = 314
+     vₑ = exhaust_velocity(Isp)
+     
+     # Gives 4647.2 kg which compares well to the 4614.4 kg Apollo actually concusmed
+     ΔP = propellant_consumption(Δv, m₀, vₑ)  
+"""
+propellant_consumption(Δv::Number, m₀::Number, vₑ::Number) = m₀ - m₀/exp(Δv/vₑ)
