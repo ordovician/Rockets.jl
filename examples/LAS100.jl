@@ -16,7 +16,7 @@ function launch_las100()
     booster = SingleBooster(tank, engine, 1, 1, 1.0)
     stage   = Stage(Sattelite(0.0), booster)
     gravity = true
-    rocket  = Rocket(stage, gravity)
+    rocket  = SpaceVehicle(stage, gravity)
 
     Δt = 0.1
     simulate_launch(rocket, Δt).body
@@ -41,7 +41,7 @@ function launch_ariane()
     booster = SingleBooster(tank, engine, 1, 1, 1.0)
     stage   = Stage(Sattelite(0.0), booster)
     gravity = true
-    rocket  = Rocket(stage, gravity)
+    rocket  = SpaceVehicle(stage, gravity)
 
     Δt = 0.1
     simulate_launch(rocket, Δt).body

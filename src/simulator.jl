@@ -20,7 +20,7 @@ function build_rocket(engines::Array{Engine}, tanks::Dict{String,PropellantTank}
 	stage2 = Stage(payload, SingleBooster(tank2, kestrel, 1))
 	stage1 = Stage(stage2, SingleBooster(tank1, merlin, 9))
 
-	falcon9 = Rocket(stage1)
+	falcon9 = SpaceVehicle(stage1)
 end
 
 function simstep!(rocket, t, Δt)
@@ -33,7 +33,7 @@ function runsimulator(t1 = 0, Δt = 1, t2 = 10)
 	engines = load_rocket_engines()
 	tanks   = load_propellant_tanks()
 
-	rocket = build_rocket(engines, tanks) :: Rocket
+	rocket = build_rocket(engines, tanks) :: SpaceVehicle
 	fulltank!(rocket)
     plot(t1:Δt:t2) do t
         simstep!(rocket, t, Δt)

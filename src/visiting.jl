@@ -13,7 +13,7 @@ Calls function `f(part)` if part is of type kind or a subtype.
 """
 visitpart(f::Function, kind::DataType, part) = dovisitpart(f, kind, part)
 
-function visitpart(f::Function, kind::DataType, r::Rocket)
+function visitpart(f::Function, kind::DataType, r::SpaceVehicle)
 	dovisitpart(f, kind, r)
     visitpart(f, kind, r.active_stage)	
 end
@@ -40,10 +40,10 @@ end
 
 
 """
-    fulltank!(r::Rocket)
+    fulltank!(r::SpaceVehicle)
 Fill up all tanks of rocket to full
 """
-function fulltank!(r::Rocket)
+function fulltank!(r::SpaceVehicle)
     # traverse rocket structure as a graph of parts, only visiting
     # parts which are Propellant Tanks. for all of these, fill them up.
     visitpart(PropellantTank, r) do tank

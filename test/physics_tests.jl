@@ -50,7 +50,7 @@
 		stage   = Stage(Sattelite(0.0), booster)
 		gravity = false  # Our Δv calculations above using the rocket equation 
 						 # does not take gravity into account
-		rocket  = Rocket(stage, gravity)
+		rocket  = SpaceVehicle(stage, gravity)
 		Δerror = Float64[]           # Approximations to Δv for different values of Δt, when 
 									 # using integration 
 		for Δt in [0.01, 0.1, 0.5, 1.0]
@@ -110,7 +110,7 @@
 
 		gravity  = false  # Our Δv calculations above using the rocket equation 
 						 # does not take gravity into account
-		rocket  = Rocket(stage1, gravity)
+		rocket  = SpaceVehicle(stage1, gravity)
 		Δerror  = Float64[]   # Approximations to Δv for different values of Δt, when 
 							  # using integration 
 		for Δt in [0.01, 0.1, 0.5, 1.0]

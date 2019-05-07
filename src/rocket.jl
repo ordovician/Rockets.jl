@@ -1,13 +1,13 @@
 import 	Base: position, copy
 
-export  Rocket, Stage,
+export  SpaceVehicle, Stage,
         mass, force, update!, stage_separate!,
         fulltank!, delta_velocity, simulate_launch,
 		propellant_mass
 
 
 "Represents a rocket in flight, with all its stages and payload."
-mutable struct Rocket
+mutable struct SpaceVehicle
 	active_stage::Payload
     body::RigidBody
 	gravity::Bool		# Is rocket affected by gravity
@@ -33,11 +33,11 @@ update!(s::Stage, t::Number, Δt::Number) = update!(s.booster, t, Δt)
 propellant_mass(s::Stage) = propellant_mass(s.booster)
 
 """
-	stage_separate!(r::Rocket)
+	stage_separate!(r::SpaceVehicle)
 Decouple bottom stage from rocket. This will typically lower the mass of the rocket.
 If stage separation succeeded function will return `true`.
 """
-function stage_separate!(r::Rocket)
+function stage_separate!(r::SpaceVehicle)
 	if r.active_stage isa Stage
 		r.active_stage = r.active_stage.payload
 		true
@@ -48,26 +48,26 @@ end
 
 copy(s::Stage) = Stage(copy(s.payload), copy(s.booster))
 
-########### Rocket ###################################################################
-function Rocket(stage::Stage, gravity::Bool = true)
+########### SpaceVehicle ###################################################################
+function SpaceVehicle(stage::Stage, gravity::Bool = true)
 	body = RigidBody(mass(stage), 0.0)
-	Rocket(stage, body, gravity)
+	SpaceVehicle(stage, body, gravity)
 end
 
-copy(r::Rocket) = Rocket(copy(r.active_stage), copy(r.body), r.gravity)
+copy(r::SpaceVehicle) = SpaceVehicle(copy(r.active_stage), copy(r.body), r.gravity)
 
-position(r::Rocket) = r.body.position
-velocity(r::Rocket) = r.body.velocity
+position(r::SpaceVehicle) = r.body.position
+velocity(r::SpaceVehicle) = r.body.velocity
 
-mass( r::Rocket) = mass(r.active_stage)
-force(r::Rocket) = force(r.active_stage)
+mass( r::SpaceVehicle) = mass(r.active_stage)
+force(r::SpaceVehicle) = force(r.active_stage)
  
 """
-	update!(r::Rocket, t::Number, Δt::Number)
+	update!(r::SpaceVehicle, t::Number, Δt::Number)
 Perform a time step. At time `t` advance the time with `Δt` and update the mass, force, acceleration,
 velocity and position of rocket.
 """
-function update!(r::Rocket, t::Number, Δt::Number)
+function update!(r::SpaceVehicle, t::Number, Δt::Number)
     stage = r.active_stage
     body  = r.body
 	
@@ -81,13 +81,13 @@ function update!(r::Rocket, t::Number, Δt::Number)
 	integrate!(body, Δt)
 end
 
-propellant_mass(r::Rocket) = propellant_mass(r.active_stage)
+propellant_mass(r::SpaceVehicle) = propellant_mass(r.active_stage)
 
 """
 	simulate_launch(rocket, Δt)
 Returns a rocket object giving all state after all fuel is spent.
 """
-function simulate_launch(rocket::Rocket, Δt::Number)
+function simulate_launch(rocket::SpaceVehicle, Δt::Number)
 	t = 0
     r = copy(rocket)
 	while r.active_stage isa Stage
@@ -105,7 +105,7 @@ end
 Calculate Δv of rocket using integration as opposed to using Tsiolkovsky rocket equation.
 It copies the `rocket` object, so it never gets mutated.
 """
-function delta_velocity(rocket::Rocket, Δt::Number)
+function delta_velocity(rocket::SpaceVehicle, Δt::Number)
     r = simulate_launch(rocket, Δt)
 	velocity(r)
 end
