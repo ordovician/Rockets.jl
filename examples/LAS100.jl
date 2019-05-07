@@ -12,9 +12,8 @@ function launch_las100()
     Δv  = delta_velocity(vₑ, m₀, mf)
 
     tank    = Tank(mf, m₀, m₀ - mf)
-    engine  = Engine("LAS100", 0.0, thrust, 0.7, Isp)
-    booster = SingleBooster(tank, engine, 1, 1, 1.0)
-    stage   = Rocket(Sattelite(0.0), booster)
+    engine  = Engine("LAS100", thrust, Isp)
+    stage   = Rocket(Sattelite(0.0), tank, engine)
     gravity = true
     rocket  = SpaceVehicle(stage, gravity)
 
@@ -36,10 +35,9 @@ function launch_ariane()
     vₑ  = exhaust_velocity(Isp)
     Δv  = delta_velocity(vₑ, m₀, mf)
 
-    tank    = Tank(mf, m₀, propellant_mass)
-    engine  = Engine("ArianeSRB", 0.0, thrust, 0.7, Isp)
-    booster = SingleBooster(tank, engine, 1, 1, 1.0)
-    stage   = Rocket(Sattelite(0.0), booster)
+    tank    = Tank(mf, m₀)
+    engine  = Engine("ArianeSRB", thrust, Isp)
+    stage   = Rocket(Sattelite(0.0), tank, engine)
     gravity = true
     rocket  = SpaceVehicle(stage, gravity)
 
