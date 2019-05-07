@@ -46,7 +46,7 @@ Fill up all tanks of rocket to full
 function fulltank!(r::SpaceVehicle)
     # traverse rocket structure as a graph of parts, only visiting
     # parts which are Propellant Tanks. for all of these, fill them up.
-    visitpart(PropellantTank, r) do tank
+    visitpart(Tank, r) do tank
         fulltank!(tank)
     end
 end

@@ -8,7 +8,7 @@ export build_rocket, simstep!, runsimulator
 "Use to find items in array"
 equal(x) = y -> y == x
 
-function build_rocket(engines::Array{Engine}, tanks::Dict{String,PropellantTank})
+function build_rocket(engines::Array{Engine}, tanks::Dict{String,Tank})
 	tank1 = copy(tanks["F9 1st stage"])
 	tank2 = copy(tanks["F9 2nd stage"])
 

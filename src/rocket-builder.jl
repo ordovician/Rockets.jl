@@ -62,13 +62,13 @@ end
 
 function load_propellant_tanks()
     tanks_table = CSV.read("data/propellant-tanks.csv")
-    tanks = Dict{String, PropellantTank}()
+    tanks = Dict{String, Tank}()
     for row in eachrow(tanks_table)
         if any(ismissing, row) continue end
         name = row[:name]
         total_mass = row[:total_mass] * mass_multiplier # Given in tons in the file
         dry_mass   = row[:dry_mass]   * mass_multiplier
-        tanks[name] = PropellantTank(dry_mass, total_mass, 0.0)
+        tanks[name] = Tank(dry_mass, total_mass, 0.0)
     end
     tanks
 end

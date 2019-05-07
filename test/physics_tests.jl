@@ -44,7 +44,7 @@
 		# delta-v to orbit on earth is around 9.4e3
 		@test 7.8e3 < Δv < 9e3
 		
-		tank    = PropellantTank(dry_mass, total_mass, propellant_mass)
+		tank    = Tank(dry_mass, total_mass, propellant_mass)
 		engine  = Engine("Merlin 1D", 0.0, thrust, 0.7, Isp)
 		booster = SingleBooster(tank, engine, 1, 1, 1.0)
 		stage   = Rocket(Sattelite(0.0), booster)
@@ -98,11 +98,11 @@
 		#  we are not taking into account gravity turn etc.
 		@test 9e3 < Δv < 12e3
 		
-		tank1    = PropellantTank(dry_mass1, total_mass1 - total_mass2, propellant_mass1)
+		tank1    = Tank(dry_mass1, total_mass1 - total_mass2, propellant_mass1)
 		engine1  = Engine("Merlin 1D", 0.0, thrust, 0.7, (Isp_SL1 + Isp_Vac1)/2)
 		booster1 = SingleBooster(tank1, engine1, 1, 1, 1.0)
 
-		tank2	 = PropellantTank(dry_mass2, total_mass2  - payload_mass, propellant_mass2)
+		tank2	 = Tank(dry_mass2, total_mass2  - payload_mass, propellant_mass2)
 		engine2  = Engine("MVac", 0.0, thrust, 0.7, Isp_Vac2)
 		booster2 = SingleBooster(tank2, engine2, 1, 1, 1.0)
 		stage2   = Rocket(Sattelite(payload_mass), booster2)

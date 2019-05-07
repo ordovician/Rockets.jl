@@ -1,6 +1,6 @@
 import Base: getproperty, copy
 
-export Engine, PropellantTank, Capsule, Sattelite,
+export Engine, Tank, Capsule, Sattelite,
        Booster, SingleBooster, MultiBooster,
        mass, force, update!,
 	   Capsule, Sattelite
@@ -17,7 +17,7 @@ struct Engine
     Isp::Float64    		# Specific Impulse. A measure of propellant efficiency of engine.
 end
 
-mutable struct PropellantTank
+mutable struct Tank
    dry_mass::Float64			# Mass of tank without propellant
    total_mass::Float64			# Mass of tank with propellant
    propellant_mass::Float64 	# Between 0 and total_mass - dry_mass	
@@ -46,7 +46,7 @@ mutable struct Sattelite <: Payload
 end
 
 mutable struct  SingleBooster <: Booster
-    tank::PropellantTank
+    tank::Tank
     engine::Engine
     no_engines::Int64				# Number of engines on this booster. E.g. 9 engines on Falcon 9 first stage
     no_active_engines::Int64		# Engines turned on. E.g. when Falcon 9 lands, only one engine is active.
@@ -54,7 +54,7 @@ mutable struct  SingleBooster <: Booster
 end
 
 "Creates a booster where all engines are on at full throttle"
-function SingleBooster(tank::PropellantTank, engine::Engine, no_engines::Integer)
+function SingleBooster(tank::Tank, engine::Engine, no_engines::Integer)
 	SingleBooster(tank, engine, no_engines, no_engines, 1.0)
 end
 
@@ -81,7 +81,7 @@ mass(engine::Engine) = engine.mass
 Merge two propellant tanks into one. This is useful if we are building a rocket with multiple separat tanks.
 For the purpose of simulation, it does not matter much whether the tanks are treated as separate or as one.
 """
-function merge!(tank::PropellantTank, addon::PropellantTank)
+function merge!(tank::Tank, addon::Tank)
    tank.dry_mass += addon.dry_mass
    tank.total_mass += addon.total_mass
    tank.propellant_mass += propellant_mass
@@ -89,21 +89,21 @@ function merge!(tank::PropellantTank, addon::PropellantTank)
    tank
 end
 
-function mass(tank::PropellantTank)
+function mass(tank::Tank)
     @assert tank.total_mass >= tank.dry_mass + tank.propellant_mass "Combined mass of propellant and dry mass, cannot exceed specified total mass for tank"
     tank.dry_mass + tank.propellant_mass
 end
 
 """
-	fulltank!(tank::PropellantTank)
+	fulltank!(tank::Tank)
 Refills the tank to full.
 """
-function fulltank!(tank::PropellantTank)
+function fulltank!(tank::Tank)
 	tank.propellant_mass = tank.total_mass - tank.dry_mass
 end
 
-function copy(tank::PropellantTank)
-	PropellantTank(tank.dry_mass, tank.total_mass, tank.propellant_mass)
+function copy(tank::Tank)
+	Tank(tank.dry_mass, tank.total_mass, tank.propellant_mass)
 end
 
 ########### Payload #########################################################################
