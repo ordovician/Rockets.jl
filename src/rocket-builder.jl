@@ -15,7 +15,7 @@ rocket engine objects, which can be used to assemble a rocket for the simulator.
 """
 function load_rocket_engines()
     engines_table = CSV.read("data/rocket-engines.csv")
-    rocket_engines = RocketEngine[]
+    rocket_engines = Engine[]
     for row in eachrow(engines_table)
         throttle = row[:throttle]
         if ismissing(throttle)
@@ -37,14 +37,14 @@ function load_rocket_engines()
             continue
         end
         
-        engine = RocketEngine(row[:name], mass, thrust, throttle, Isp)
+        engine = Engine(row[:name], mass, thrust, throttle, Isp)
         push!(rocket_engines, engine)
     end
     rocket_engines
 end
 
 """
-	getindex(engines::Array{RocketEngine}, key)
+	getindex(engines::Array{Engine}, key)
 Gives a dictionary style interface to an array of rocket engines, so we can conveniently lookup an engine
 based on a name.
 
@@ -52,7 +52,7 @@ based on a name.
 	engines = load_rocket_engines()
 	kestrel = engines["Kestrel 2"]
 """
-function getindex(engines::Array{RocketEngine}, key::AbstractString)
+function getindex(engines::Array{Engine}, key::AbstractString)
    i = findfirst(e -> e.name == key, engines)
    if i == nothing
        throw(KeyError(key))

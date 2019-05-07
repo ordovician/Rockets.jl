@@ -78,7 +78,7 @@ function update!(r::Rocket, t::Number, Δt::Number)
 	if r.gravity
 	    body.force += gravity_force(body.mass)
 	end
-    integrate!(body, Δt)
+	integrate!(body, Δt)
 end
 
 propellant_mass(r::Rocket) = propellant_mass(r.active_stage)

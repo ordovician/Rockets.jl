@@ -1,6 +1,6 @@
 import Base: getproperty, copy
 
-export RocketEngine, PropellantTank, Capsule, Sattelite,
+export Engine, PropellantTank, Capsule, Sattelite,
        Booster, SingleBooster, MultiBooster,
        mass, force, update!,
 	   Capsule, Sattelite
@@ -9,7 +9,7 @@ export RocketEngine, PropellantTank, Capsule, Sattelite,
 Keeps track of information needed to calculate the thrust a rocket performs, as well as how much
 it weighs. The weight of the rocket engines is an imporant part of the total weight of the rocket.
 """
-struct RocketEngine
+struct Engine
     name::String			# An identifier such as Merlin 1D, RD-180
     mass::Float64			# Mass of rocket engine in Kg
     max_thrust::Float64		# Max amount of thrust engine can produce, measured in Newton.
@@ -47,14 +47,14 @@ end
 
 mutable struct  SingleBooster <: Booster
     tank::PropellantTank
-    engine::RocketEngine
+    engine::Engine
     no_engines::Int64				# Number of engines on this booster. E.g. 9 engines on Falcon 9 first stage
     no_active_engines::Int64		# Engines turned on. E.g. when Falcon 9 lands, only one engine is active.
     throttle::Float64				# Either 0 or in range (min_throttle, 1)
 end
 
 "Creates a booster where all engines are on at full throttle"
-function SingleBooster(tank::PropellantTank, engine::RocketEngine, no_engines::Integer)
+function SingleBooster(tank::PropellantTank, engine::Engine, no_engines::Integer)
 	SingleBooster(tank, engine, no_engines, no_engines, 1.0)
 end
 
@@ -68,10 +68,10 @@ mutable struct  MultiBooster <: Booster
 end
 
 
-########### RocketEngine #############################################################################
-RocketEngine(name, mass, max_thrust, Isp) = RocketEngine(name, mass, max_thrust, 0.0, Isp) 
+########### Engine #############################################################################
+Engine(name, mass, max_thrust, Isp) = Engine(name, mass, max_thrust, 0.0, Isp) 
 
-mass(engine::RocketEngine) = engine.mass
+mass(engine::Engine) = engine.mass
 
 
 ########### Propellant Tank ##########################################################################

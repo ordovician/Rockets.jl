@@ -45,7 +45,7 @@
 		@test 7.8e3 < Δv < 9e3
 		
 		tank    = PropellantTank(dry_mass, total_mass, propellant_mass)
-		engine  = RocketEngine("Merlin 1D", 0.0, thrust, 0.7, Isp)
+		engine  = Engine("Merlin 1D", 0.0, thrust, 0.7, Isp)
 		booster = SingleBooster(tank, engine, 1, 1, 1.0)
 		stage   = Stage(Sattelite(0.0), booster)
 		gravity = false  # Our Δv calculations above using the rocket equation 
@@ -99,11 +99,11 @@
 		@test 9e3 < Δv < 12e3
 		
 		tank1    = PropellantTank(dry_mass1, total_mass1 - total_mass2, propellant_mass1)
-		engine1  = RocketEngine("Merlin 1D", 0.0, thrust, 0.7, (Isp_SL1 + Isp_Vac1)/2)
+		engine1  = Engine("Merlin 1D", 0.0, thrust, 0.7, (Isp_SL1 + Isp_Vac1)/2)
 		booster1 = SingleBooster(tank1, engine1, 1, 1, 1.0)
 
 		tank2	 = PropellantTank(dry_mass2, total_mass2  - payload_mass, propellant_mass2)
-		engine2  = RocketEngine("MVac", 0.0, thrust, 0.7, Isp_Vac2)
+		engine2  = Engine("MVac", 0.0, thrust, 0.7, Isp_Vac2)
 		booster2 = SingleBooster(tank2, engine2, 1, 1, 1.0)
 		stage2   = Stage(Sattelite(payload_mass), booster2)
 		stage1   = Stage(stage2, booster1)		
