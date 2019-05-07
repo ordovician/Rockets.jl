@@ -17,8 +17,8 @@ function build_rocket(engines::Array{Engine}, tanks::Dict{String,PropellantTank}
 
 	payload = Sattelite(22.8)
 
-	stage2 = Stage(payload, SingleBooster(tank2, kestrel, 1))
-	stage1 = Stage(stage2, SingleBooster(tank1, merlin, 9))
+	stage2 = Rocket(payload, SingleBooster(tank2, kestrel, 1))
+	stage1 = Rocket(stage2, SingleBooster(tank1, merlin, 9))
 
 	falcon9 = SpaceVehicle(stage1)
 end

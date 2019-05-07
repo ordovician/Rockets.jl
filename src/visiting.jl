@@ -18,7 +18,7 @@ function visitpart(f::Function, kind::DataType, r::SpaceVehicle)
     visitpart(f, kind, r.active_stage)	
 end
 
-function visitpart(f::Function, kind::DataType, s::Stage)
+function visitpart(f::Function, kind::DataType, s::Rocket)
 	dovisitpart(f, kind, s)
     visitpart(f, kind, s.booster)	
 	visitpart(f, kind, s.payload)

@@ -14,7 +14,7 @@ function launch_las100()
     tank    = PropellantTank(mf, m₀, m₀ - mf)
     engine  = Engine("LAS100", 0.0, thrust, 0.7, Isp)
     booster = SingleBooster(tank, engine, 1, 1, 1.0)
-    stage   = Stage(Sattelite(0.0), booster)
+    stage   = Rocket(Sattelite(0.0), booster)
     gravity = true
     rocket  = SpaceVehicle(stage, gravity)
 
@@ -39,7 +39,7 @@ function launch_ariane()
     tank    = PropellantTank(mf, m₀, propellant_mass)
     engine  = Engine("ArianeSRB", 0.0, thrust, 0.7, Isp)
     booster = SingleBooster(tank, engine, 1, 1, 1.0)
-    stage   = Stage(Sattelite(0.0), booster)
+    stage   = Rocket(Sattelite(0.0), booster)
     gravity = true
     rocket  = SpaceVehicle(stage, gravity)
 
