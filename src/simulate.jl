@@ -1,4 +1,4 @@
-export build_rocket, simstep!, runsimulator
+export build_rocket, simstep!, runsimulator, simulate_launch, delta_velocity
 
 # using Plots
 # plotly()
@@ -47,3 +47,31 @@ function runsimulator(t1 = 0, Δt = 1, t2 = 10)
     # end
     # plot(T, Y)
 end
+
+"""
+	simulate_launch(rocket, Δt)
+Returns a rocket object giving all state after all fuel is spent.
+"""
+function simulate_launch(rocket::SpaceVehicle, Δt::Number)
+	t = 0
+    r = copy(rocket)
+	while r.active_stage isa Rocket
+		while propellant_mass(r) > 0
+			update!(r, t, Δt)
+			t += Δt
+		end
+		stage_separate!(r)
+	end
+    r    
+end
+
+"""
+	delta_velocity(rocket, Δt)
+Calculate Δv of rocket using integration as opposed to using Tsiolkovsky rocket equation.
+It copies the `rocket` object, so it never gets mutated.
+"""
+function delta_velocity(rocket::SpaceVehicle, Δt::Number)
+    r = simulate_launch(rocket, Δt)
+	velocity(r)
+end
+

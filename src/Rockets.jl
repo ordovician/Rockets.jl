@@ -6,13 +6,20 @@ module Rockets
 
 include("geometry/Geometri.jl")
 include("physics/Fysikk.jl")
-include("rocket-equations.jl")
+
 include("transform.jl")
+
 include("rocket-parts.jl")
-include("rocket.jl")
+include("vehicles.jl")
+
+include("properties.jl")
+include("actions.jl")
+
 include("visiting.jl")
-include("rocket-builder.jl")
-include("simulator.jl")
+include("parts-loading.jl")
+
 include("plotting.jl")
+include("simulate.jl")
+
 
 end # module
