@@ -16,10 +16,11 @@ mutable struct Rocket <: Payload
     engine::Engine
     throttle::Float64		# Either 0 or in range (min_throttle, 1)
     propellant::Float64     # Amount of propellant mass left
+    sideboosters::Array{Rocket} # Side booster can fire engines along with core stage
 end
 
 function Rocket(payload::Payload, tank::Tank, engine::Engine, throttle = 1.0)
-    Rocket(payload, tank, engine, throttle, max_propellant(tank))
+    Rocket(payload, tank, engine, throttle, max_propellant(tank), Rocket[])
 end
 
 """
@@ -42,7 +43,7 @@ mutable struct SpaceVehicle
 	gravity::Bool		# Is rocket affected by gravity
 end
 
-function SpaceVehicle(stage::Rocket, gravity::Bool = true)
-	body = RigidBody(mass(stage), 0.0)
-	SpaceVehicle(stage, body, gravity)
+function SpaceVehicle(r::Rocket, gravity::Bool = true)
+	body = RigidBody(mass(r), 0.0)
+	SpaceVehicle(r, body, gravity)
 end

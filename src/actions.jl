@@ -1,14 +1,29 @@
 import Base: copy
-export stage_separate!, update!, combine, fulltank! 
+export stage_separate!, detach_sideboosters!, update!, combine, fulltank! 
 
 """
-	stage_separate!(r::SpaceVehicle)
+	stage_separate!(ship::SpaceVehicle)
 Decouple bottom stage from rocket. This will typically lower the mass of the rocket.
 If stage separation succeeded function will return `true`.
 """
-function stage_separate!(r::SpaceVehicle)
-	if r.active_stage isa Rocket
-		r.active_stage = r.active_stage.payload
+function stage_separate!(ship::SpaceVehicle)
+	stage = ship.active_stage
+	if stage isa Rocket
+		ship.active_stage = stage.payload
+		true
+	else
+		false
+	end
+end
+
+"""
+	detach_sideboosters!(ship::SpaceVehicle)
+Decouple the side boosters on the bottom stage of the rocket.
+"""
+function detach_sideboosters!(ship::SpaceVehicle)
+	stage = ship.active_stage
+	if stage isa Rocket
+		stage.sideboosters = Rocket[]
 		true
 	else
 		false
@@ -19,9 +34,9 @@ end
 
 copy(r::SpaceVehicle) = SpaceVehicle(copy(r.active_stage), copy(r.body), r.gravity)
 copy(payload) = payload # assume payload is immutable
-copy(r::Rocket) = Rocket(copy(r.payload), r.tank, r.engine, r.throttle)
+copy(r::Rocket) = Rocket(copy(r.payload), r.tank, r.engine, r.throttle, r.propellant, copy(r.sideboosters))
 
-###################### update! #############################################
+###################### update! ##########################################
 
 """
 	update!(r::SpaceVehicle, t::Number, Δt::Number)
@@ -44,7 +59,11 @@ end
 
 function update!(r::Rocket, t::Number, Δt::Number)
     mflow = mass_flow(thrust(r), Isp(r.engine))
-    r.propellant -= min(mflow * Δt, r.propellant)
+	r.propellant -= min(mflow * Δt, r.propellant)
+	
+	for booster in r.sideboosters
+		update!(booster, t, Δt)
+	end
 end
 
 

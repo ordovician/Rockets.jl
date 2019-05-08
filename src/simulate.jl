@@ -48,20 +48,26 @@ function runsimulator(t1 = 0, Δt = 1, t2 = 10)
 end
 
 """
-	simulate_launch(rocket, Δt)
-Returns a rocket object giving all state after all fuel is spent.
+	simulate_launch(rocket, Δt; max_duration = 2000)
+Returns a rocket object giving all state after all fuel is spent. You can specify a 
+maxium duration `max_duration` of the flight in seconds. This is practical to avoid
+the simulated launch never terminating.
 """
-function simulate_launch(rocket::SpaceVehicle, Δt::Number)
-	t = 0
-    r = copy(rocket)
-	while r.active_stage isa Rocket
-		while propellant(r) > 0
-			update!(r, t, Δt)
+function simulate_launch(spaceship::SpaceVehicle, Δt::Number; max_duration::Number = 2000)
+	t = 0			# start time
+    ship = copy(spaceship)
+	while ship.active_stage isa Rocket
+		while propellant(ship) > 0 && t <= max_duration
+			boosters = sideboosters(ship)
+			if !isempty(boosters) && sum(propellant.(boosters)) <= 0
+				detach_sideboosters!(ship)
+			end
+			update!(ship, t, Δt)
 			t += Δt
 		end
-		stage_separate!(r)
+		stage_separate!(ship)
 	end
-    r    
+    ship    
 end
 
 """
