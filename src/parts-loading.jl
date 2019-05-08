@@ -2,7 +2,7 @@ import CSV
 import DataFrames: eachrow, ismissing
 import Base: getindex
 
-export load_rocket_engines, load_propellant_tanks
+export load_engines, load_tanks
 
 const mass_multiplier = 1000 # reading masses in tons but want to store them in Kg. However thrust in kN
 						  # so it should even out
@@ -13,7 +13,7 @@ const thrust_multiplier = mass_multiplier
 Loads rocket engine definition stored in CSV file, and creates and array of
 rocket engine objects, which can be used to assemble a rocket for the simulator.
 """
-function load_rocket_engines()
+function load_engines()
     engines_table = CSV.read("data/rocket-engines.csv")
     rocket_engines = Engine[]
     for row in eachrow(engines_table)
@@ -37,7 +37,7 @@ function load_rocket_engines()
             continue
         end
         
-        engine = Engine(row[:name], mass, thrust, throttle, Isp)
+        engine = Engine(row[:name], thrust, Isp, mass = mass, throttle = throttle)
         push!(rocket_engines, engine)
     end
     rocket_engines
@@ -60,7 +60,7 @@ function getindex(engines::Array{Engine}, key::AbstractString)
    engines[i]
 end
 
-function load_propellant_tanks()
+function load_tanks()
     tanks_table = CSV.read("data/propellant-tanks.csv")
     tanks = Dict{String, Tank}()
     for row in eachrow(tanks_table)
@@ -68,7 +68,7 @@ function load_propellant_tanks()
         name = row[:name]
         total_mass = row[:total_mass] * mass_multiplier # Given in tons in the file
         dry_mass   = row[:dry_mass]   * mass_multiplier
-        tanks[name] = Tank(dry_mass, total_mass, 0.0)
+        tanks[name] = Tank(dry_mass, total_mass)
     end
     tanks
 end

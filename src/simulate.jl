@@ -1,4 +1,4 @@
-export build_rocket, simstep!, runsimulator, simulate_launch, delta_velocity
+export build_spaceship, simstep!, runsimulator, simulate_launch, delta_velocity
 
 # using Plots
 # plotly()
@@ -8,9 +8,9 @@ export build_rocket, simstep!, runsimulator, simulate_launch, delta_velocity
 "Use to find items in array"
 equal(x) = y -> y == x
 
-function build_rocket(engines::Array{Engine}, tanks::Dict{String,Tank})
-	tank1 = copy(tanks["F9 1st stage"])
-	tank2 = copy(tanks["F9 2nd stage"])
+function build_spaceship(engines::Array{Engine}, tanks::Dict{String,Tank})
+	tank1 = tanks["F9 1st stage"]
+	tank2 = tanks["F9 2nd stage"]
 
 	merlin  = engines["Merlin 1D"]
 	kestrel = engines["Kestrel 2"]
@@ -30,10 +30,10 @@ function simstep!(rocket, t, Δt)
 end
 
 function runsimulator(t1 = 0, Δt = 1, t2 = 10)
-	engines = load_rocket_engines()
-	tanks   = load_propellant_tanks()
+	engines = load_engines()
+	tanks   = load_tanks()
 
-	rocket = build_rocket(engines, tanks) :: SpaceVehicle
+	rocket = build_spaceship(engines, tanks) :: SpaceVehicle
     plot(t1:Δt:t2) do t
         simstep!(rocket, t, Δt)
     end
