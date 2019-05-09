@@ -7,6 +7,10 @@ sideboosters(dummy) = Rocket[]
 sideboosters(ship::SpaceVehicle) = sideboosters(ship.active_stage)
 sideboosters(r::Rocket) = r.sideboosters
 
+name(engine::SingleEngine)  = engine.name
+name(cluster::EngineCluster) = name(cluster.engine) 
+
+
 ###################### throttle #############################################
 min_throttle(engine::SingleEngine) = engine.min_throttle
 min_throttle(cluster::EngineCluster) = min_throttle(cluster.engine)
