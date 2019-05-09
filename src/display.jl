@@ -3,18 +3,26 @@ import Base: show
 const tab = "   "
 
 function show(io::IO, engine::Engine, depth::Integer = 0)
-    println(io, tab^depth, "engine:")
-    depth += 1
-    println(io, tab^depth, "name   = ", name(engine))
-    println(io, tab^depth, "thrust = ", thrust(engine))    
-    println(io, tab^depth, "Isp    = ", Isp(engine))      
+    if get(io, :compact, false)
+        print(io, "Engine($(name(engine)))")
+    else
+        println(io, tab^depth, "engine:")
+        depth += 1
+        println(io, tab^depth, "name   = ", name(engine))
+        println(io, tab^depth, "thrust = ", thrust(engine))    
+        println(io, tab^depth, "Isp    = ", Isp(engine))
+    end
 end
 
 function show(io::IO, tank::Tank, depth::Integer = 0)
-    println(io, tab^depth, "tank:")
-    depth += 1
-    println(io, tab^depth, "dry   = ", tank.dry_mass)
-    println(io, tab^depth, "total = ", tank.total_mass)    
+    if get(io, :compact, false)
+        print(io, "Tank($(tank.dry_mass))")
+    else
+        println(io, tab^depth, "tank:")
+        depth += 1
+        println(io, tab^depth, "dry   = ", tank.dry_mass)
+        println(io, tab^depth, "total = ", tank.total_mass)
+    end
 end
 
 function print_stage(io::IO, rocket::Rocket, depth::Number)
@@ -39,28 +47,36 @@ function show(io::IO, payload::Payload, depth::Number)
 end
 
 function show(io::IO, ship::SpaceVehicle)
-    println(io, "position = ", position(ship))
-    println(io, "velocity = ", velocity(ship))
-    println(io)
-    for (i, part) in enumerate(reverse(collect(ship)))
-        println(io, "stage ", i, ": ")
-        print_stage(io, part, 1)
+    if get(io, :compact, false)
+        print(io, "SpaceVehicle($(position(ship)), $(velocity(ship)))")
+    else
+        println(io, "position = ", position(ship))
+        println(io, "velocity = ", velocity(ship))
+        println(io)
+        for (i, part) in enumerate(reverse(collect(ship)))
+            println(io, "stage ", i, ": ")
+            print_stage(io, part, 1)
+        end
     end
 end
 
 function show(io::IO, r::Rocket, depth::Integer = 0)
-    println(io, tab^depth, "Rocket:")
+    if get(io, :compact, false)
+        print(io, "Rocket($(r.throttle), $(r.propellant))")
+    else
+        println(io, tab^depth, "Rocket:")
     
-    depth += 1
-    println(io, tab^depth, "throttle   = ", r.throttle)
-    println(io, tab^depth, "propellant = ", r.propellant)    
-    println(io)
+        depth += 1
+        println(io, tab^depth, "throttle   = ", r.throttle)
+        println(io, tab^depth, "propellant = ", r.propellant)    
+        println(io)
     
-    show(io, r.tank, depth)
-    println(io)
-    show(io, r.engine, depth)
-    println(io)
+        show(io, r.tank, depth)
+        println(io)
+        show(io, r.engine, depth)
+        println(io)
     
-    println(io, tab^depth , "Payload:")
-    show(io, r.payload, depth + 1)
+        println(io, tab^depth , "Payload:")
+        show(io, r.payload, depth + 1)
+    end
 end
