@@ -18,6 +18,7 @@ include("actions.jl")
 include("iteration.jl")
 include("parts-loading.jl")
 
+include("display.jl")
 include("plotting.jl")
 include("simulate.jl")
 
