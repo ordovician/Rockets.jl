@@ -1,4 +1,4 @@
-export  Engine, Tank
+export  Engine, EngineCluster, Tank
 
 """
 Keeps track of information needed to calculate the thrust a rocket performs, as well as how much

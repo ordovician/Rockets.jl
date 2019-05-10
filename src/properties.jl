@@ -1,4 +1,4 @@
-export position, velocity, force, thrust, Isp, mass, propellant, max_propellant
+export position, velocity, sideboosters, force, thrust, Isp, mass, propellant, max_propellant
 
 position(r::SpaceVehicle) = r.body.position
 velocity(r::SpaceVehicle) = r.body.velocity

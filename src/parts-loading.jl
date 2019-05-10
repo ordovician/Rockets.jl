@@ -14,7 +14,8 @@ Loads rocket engine definition stored in CSV file, and creates and array of
 rocket engine objects, which can be used to assemble a rocket for the simulator.
 """
 function load_engines()
-    engines_table = CSV.read("data/rocket-engines.csv")
+	path = joinpath(@__DIR__, "..", "data/rocket-engines.csv")
+    engines_table = CSV.read(path)
     rocket_engines = Engine[]
     for row in eachrow(engines_table)
         throttle = row[:throttle]
@@ -61,7 +62,8 @@ function getindex(engines::Array{Engine}, key::AbstractString)
 end
 
 function load_tanks()
-    tanks_table = CSV.read("data/propellant-tanks.csv")
+	path = joinpath(@__DIR__, "..", "data/propellant-tanks.csv")
+    tanks_table = CSV.read(path)
     tanks = Dict{String, Tank}()
     for row in eachrow(tanks_table)
         if any(ismissing, row) continue end

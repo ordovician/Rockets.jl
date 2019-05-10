@@ -39,19 +39,19 @@ copy(r::Rocket) = Rocket(copy(r.payload), r.tank, r.engine, r.throttle, r.propel
 ###################### update! ##########################################
 
 """
-	update!(r::SpaceVehicle, t::Number, Δt::Number)
+	update!(ship::SpaceVehicle, t::Number, Δt::Number)
 Perform a time step. At time `t` advance the time with `Δt` and update the mass, force, acceleration,
-velocity and position of rocket.
+velocity and position of space vehicle.
 """
-function update!(r::SpaceVehicle, t::Number, Δt::Number)
-    stage = r.active_stage
-    body  = r.body
+function update!(ship::SpaceVehicle, t::Number, Δt::Number)
+    stage = ship.active_stage
+    body  = ship.body
 	
 	update!(stage, t, Δt)
 
-    body.mass   = mass(r)
-    body.force  = rotate(body.orientation) * Vector2D(0.0, thrust(r))
-	if r.gravity
+    body.mass   = mass(ship)
+    body.force  = rotate(body.orientation) * Vector2D(0.0, thrust(ship))
+	if ship.gravity
 	    body.force += gravity_force(body.mass)
 	end
 	integrate!(body, Δt)

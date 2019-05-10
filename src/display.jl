@@ -53,9 +53,10 @@ function show(io::IO, ship::SpaceVehicle)
         println(io, "position = ", position(ship))
         println(io, "velocity = ", velocity(ship))
         println(io)
-        for (i, part) in enumerate(reverse(collect(ship)))
+		stages = collect(ship)
+        for i in length(stages):-1:1
             println(io, "stage ", i, ": ")
-            print_stage(io, part, 1)
+            print_stage(io, stages[i], 1)
         end
     end
 end
