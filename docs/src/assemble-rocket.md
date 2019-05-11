@@ -56,13 +56,13 @@ using CSV
 using Latexify
 dir, _ = splitdir(pathof(Rockets))
 path = joinpath(dir, "..", "data/rocket-engines.csv")
- tanks_table = CSV.read(path)
-mdtable(tanks_table,latex=false)
+engine_table = CSV.read(path)
+mdtable(engine_table[[:name, :company, :mass, :thrust_SL, :Isp_SL]], latex=false)
 ```
 
 Just use the  `load_engines()` functions returning a list of rocket engine objects.
 
-```@repl rockets
+```@repl parts
 tanks = load_tanks()
 ```
 

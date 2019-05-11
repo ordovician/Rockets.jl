@@ -32,8 +32,10 @@ a rocket with total initial mass of `m₀`, and final mass of `mf`. The mass of 
 
 Usually you are not given the exhaust velocity of the the propellant. So Calulation would be:
 
-    vₑ = exhaust_velocity(282)
-    Δv = delta_velocity(vₑ, m₀, mf)
+```@example
+vₑ = exhaust_velocity(282)
+Δv = delta_velocity(vₑ, m₀, mf)
+```
 """
 delta_velocity(vₑ::Number, m₀::Number, mf::Number) = vₑ*log(m₀/mf)
 
@@ -51,18 +53,20 @@ rocket_thrust(Isp::Number, mass_flow::Number) = g₀ * Isp * mass_flow
 Get mass flow in Kg/s of propellant for an engine with given `thrust` and specific impulse `Isp`.
 
 ## Example
-    
-    # Calculating mass flow for a Falcon 9 rocket.
 
-    engine_thrust = 0.845e6            # Newton
-    Isp           = 282                # Specific impulse in seconds
-    thrust    = engine_thrust * 9      # There are 9 merlin engines on Falcon 9
-    mflow1  = mass_flow(thrust, Isp)   # Total mass flow in rocket. Kg/s
+```@example    
+# Calculating mass flow for a Falcon 9 rocket.
 
-    # Should get similar result from using burn time and total propellant
-    burn_time = 162          # Number of seconds first stage engines will burn
-    propellant_mass = 395700 # About 400 tons
-    mflow2 = propellant_mass / burn_time 
+engine_thrust = 0.845e6            # Newton
+Isp           = 282                # Specific impulse in seconds
+thrust  = engine_thrust * 9        # There are 9 merlin engines on Falcon 9
+mflow1  = mass_flow(thrust, Isp)   # Total mass flow in rocket. Kg/s
+
+# Should get similar result from using burn time and total propellant
+burn_time = 162          # Number of seconds first stage engines will burn
+propellant_mass = 395700 # About 400 tons
+mflow2 = propellant_mass / burn_time 
+```
 """
 mass_flow(thrust::Number, Isp::Number) = thrust / (Isp * g₀)
 
@@ -83,17 +87,19 @@ an important input. A more powerful engine will get you up to speed faster, so `
 
 ## Example
 
-    # Calculating  Apollo 11 CSM Columbia is executing her 
-    # Trans-Earth-Injection (TEI) Burn to return to earth with
-    # the following key parameters:
-    Δv = 999.444    # m/s
-    m₀ = 16_767.35  # mass of spacecraft in kg
-    thrust = 91_200 # Newton
-    Isp = 314
-    vₑ = exhaust_velocity(Isp)
-    
-    # Gives 156.9 secs, close to 151.4 secs used by Apollo 11 to return to earth
-    ΔT = burn_length(Δv, m₀, thrust, vₑ)
+```@example
+# Calculating  Apollo 11 CSM Columbia is executing her 
+# Trans-Earth-Injection (TEI) Burn to return to earth with
+# the following key parameters:
+Δv = 999.444    # m/s
+m₀ = 16_767.35  # mass of spacecraft in kg
+thrust = 91_200 # Newton
+Isp = 314
+vₑ = exhaust_velocity(Isp)
+
+# Gives 156.9 secs, close to 151.4 secs used by Apollo 11 to return to earth
+ΔT = burn_length(Δv, m₀, thrust, vₑ)
+```
 """
 burn_length(Δv::Number, m₀::Number, thrust::Number, vₑ::Number) =  (1 - exp(-Δv/vₑ))*m₀*vₑ/thrust
 
@@ -105,13 +111,15 @@ the exhaust velocity `vₑ` of its engine to calculate propellant consumed.
 
 ## Example
 
-     # Calculating propellant consumed by Apollo 11 CSM
-     Δv = 999.444    # m/s
-     m₀ = 16_767.35  # mass of spacecraft in kg
-     Isp = 314
-     vₑ = exhaust_velocity(Isp)
-     
-     # Gives 4647.2 kg which compares well to the 4614.4 kg Apollo actually concusmed
-     ΔP = propellant_consumption(Δv, m₀, vₑ)  
+```@example
+# Calculating propellant consumed by Apollo 11 CSM
+Δv = 999.444    # m/s
+m₀ = 16_767.35  # mass of spacecraft in kg
+Isp = 314
+vₑ = exhaust_velocity(Isp)
+
+# Gives 4647.2 kg which compares well to the 4614.4 kg Apollo actually concusmed
+ΔP = propellant_consumption(Δv, m₀, vₑ)  
+```
 """
 propellant_consumption(Δv::Number, m₀::Number, vₑ::Number) = m₀ - m₀/exp(Δv/vₑ)
