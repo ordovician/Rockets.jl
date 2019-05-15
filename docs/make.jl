@@ -9,6 +9,6 @@ makedocs(
 		"simulate-launches.md",
 		"rocket-equations.md"
 	],
-    # format = Documenter.HTML(prettyurls = false) # prettyurls = false allows us to jump to HTML files locally
-    format =  DocumenterMarkdown.Markdown()
+    format = Documenter.HTML(prettyurls = false) # prettyurls = false allows us to jump to HTML files locally
+    # format =  DocumenterMarkdown.Markdown()
 )
