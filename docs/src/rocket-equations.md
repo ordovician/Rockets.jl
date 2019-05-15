@@ -9,6 +9,10 @@ With thrust at and remaining mass of rocket we can calculate the acceleration of
 
 The total change in velocity from launching a rocket and flying it until it has spent all its fuel is called delta-v `Δt`. We can validate the result we get by using Tsiolkovsky's famous rocket equation [`delta_velocity`](@ref).
 
+```math
+\Delta v = v_e \ln \frac{m_0}{m_f}
+```
+
 ```@docs
 mass_flow
 exhaust_velocity
