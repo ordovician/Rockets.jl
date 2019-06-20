@@ -4,15 +4,16 @@ export stage_separate!, detach_sideboosters!, update!, combine, fulltank!
 """
 	stage_separate!(ship::SpaceVehicle)
 Decouple bottom stage from rocket. This will typically lower the mass of the rocket.
-If stage separation succeeded function will return `true`.
+If stage separation succeeded function will return separated stage. Otherwise `nothing`.
 """
 function stage_separate!(ship::SpaceVehicle)
 	stage = ship.active_stage
 	if stage isa Rocket
 		ship.active_stage = stage.payload
-		true
+		stage.payload = NoPayload() # Disconnect separated stage from rest of rocket
+        stage
 	else
-		false
+		nothing
 	end
 end
 

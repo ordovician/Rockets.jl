@@ -1,10 +1,14 @@
 export  SpaceVehicle, 
-        Payload, Rocket, Capsule, SpaceProbe, Sattelite
+        Payload, NoPayload, Rocket, Capsule, SpaceProbe, Sattelite
 
 """
 Anything a stage pushes into the air/space with its booster. Could be e.g. a sattelite or another rocket stage
 """
 abstract type Payload end
+
+"Rocket with no payload, such as a detached booster."
+struct NoPayload <: Payload
+end
 
 """
 A single stage rocket, with a payload which could potentially be another rocket 
