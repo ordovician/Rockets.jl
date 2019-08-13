@@ -112,13 +112,13 @@ the exhaust velocity `vₑ` of its engine to calculate propellant consumed.
 ## Example
 
 ```@example
-# Calculating propellant consumed by Apollo 11 CSM
+# Calculating propellant consumed by Apollo 11 CSM (command and service module)
 Δv = 999.444    # m/s
 m₀ = 16_767.35  # mass of spacecraft in kg
 Isp = 314
 vₑ = exhaust_velocity(Isp)
 
-# Gives 4647.2 kg which compares well to the 4614.4 kg Apollo actually concusmed
+# Gives 4647.2 kg which compares well to the 4614.4 kg Apollo CSM actually consumed
 ΔP = propellant_consumption(Δv, m₀, vₑ)  
 ```
 """
