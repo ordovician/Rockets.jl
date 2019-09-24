@@ -10,26 +10,19 @@ export 	Point2D, ismin, ismax,
         
 
 struct Point2D{T <: Number}
-	x::Number
-	y::Number
+	x::T
+	y::T
 end
-
-Point2D(x::T, y::T) where T <: Number = Point2D{T}(x, y)
 
 struct Vector2D{T <: Number}
-	x::Number
-	y::Number
+	x::T
+	y::T
 end
-
-Vector2D(x::T, y::T) where T <: Number = Vector2D{T}(x, y)
 
 struct Direction2D{T <: Number}
-	x::Number
-	y::Number
+	x::T
+	y::T
 end
-
-Direction2D(x::T, y::T) where T <: Number = Direction2D{T}(x, y)
-
 
 VecOrDir      = Union{Vector2D, Direction2D}
 PointVecOrDir = Union{Vector2D, Direction2D, Point2D}
