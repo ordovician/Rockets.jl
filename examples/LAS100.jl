@@ -11,7 +11,7 @@ function launch_las100()
     vₑ  = exhaust_velocity(Isp)
     Δv  = delta_velocity(vₑ, m₀, mf)
 
-    tank    = Tank(mf, m₀, m₀ - mf)
+    tank    = Tank(mf, m₀)
     engine  = Engine("LAS100", thrust, Isp)
     stage   = Rocket(Satellite(0.0), tank, engine)
     gravity = true
