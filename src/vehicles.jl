@@ -1,5 +1,5 @@
 export  SpaceVehicle, 
-        Payload, NoPayload, Rocket, Capsule, SpaceProbe, Sattelite
+        Payload, NoPayload, Rocket, Capsule, SpaceProbe, Satellite
 
 """
 Anything a stage pushes into the air/space with its booster. Could be e.g. a sattelite or another rocket stage
@@ -38,7 +38,7 @@ struct SpaceProbe <: Payload
     mass::Float64
 end
 
-mutable struct Sattelite <: Payload
+mutable struct Satellite <: Payload
 	mass::Float64
 end
 

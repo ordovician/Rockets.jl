@@ -15,7 +15,7 @@ function build_spaceship(engines::Array{Engine}, tanks::Dict{String,Tank})
 	merlin  = engines["Merlin 1D"]
 	kestrel = engines["Kestrel 2"]
 
-	payload = Sattelite(22.8)
+	payload = Satellite(22.8)
 
 	stage2 = Rocket(payload, tank2, kestrel)
 	stage1 = Rocket(stage2, tank1, EngineCluster(merlin, 9))
@@ -54,7 +54,7 @@ maxium duration `max_duration` of the flight in seconds. This is practical to av
 the simulated launch never terminating.
 """
 function simulate_launch(spaceship::SpaceVehicle, Δt::Number; max_duration::Number = 2000)
-	t = 0			# start time
+    t = 0 # start time
     ship = copy(spaceship)
 	while ship.active_stage isa Rocket
 		while propellant(ship) > 0 && t <= max_duration

@@ -32,7 +32,7 @@ Putting all this together we can simulate a launch by keeping track of propellan
 using Rockets   # hide
 kestrel  = Engine("Kestrel 2", 31e3, 311, mass = 52)
 stage2_tank  = Tank(3.9e3, 96.57e3)
-stage2 = Rocket(Sattelite(22.8e3), stage2_tank, kestrel)
+stage2 = Rocket(Satellite(22.8e3), stage2_tank, kestrel)
 
 merlin = Engine("Merlin 1D", 845e3, 282, mass = 470)
 stage1_tank = Tank(23.1e3, 418.8e3)

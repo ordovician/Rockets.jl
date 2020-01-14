@@ -46,7 +46,7 @@
 		
 		tank    = Tank(dry_mass, total_mass)
 		engine  = Engine("Merlin 1D", thrust, Isp, throttle = 0.7)
-		stage   = Rocket(Sattelite(0.0), tank, engine)
+		stage   = Rocket(Satellite(0.0), tank, engine)
 		gravity = false  # Our Δv calculations above using the rocket equation 
 						 # does not take gravity into account
 		rocket  = SpaceVehicle(stage, gravity)
@@ -102,7 +102,7 @@
 
 		tank2	 = Tank(dry_mass2, total_mass2  - payload_mass)
 		engine2  = Engine("MVac", thrust, Isp_Vac2, throttle = 0.7)
-		stage2   = Rocket(Sattelite(payload_mass), tank2, engine2)
+		stage2   = Rocket(Satellite(payload_mass), tank2, engine2)
 		stage1   = Rocket(stage2, tank1, engine1)		
 
 		gravity  = false  # Our Δv calculations above using the rocket equation 

@@ -13,7 +13,7 @@ function launch_las100()
 
     tank    = Tank(mf, m₀, m₀ - mf)
     engine  = Engine("LAS100", thrust, Isp)
-    stage   = Rocket(Sattelite(0.0), tank, engine)
+    stage   = Rocket(Satellite(0.0), tank, engine)
     gravity = true
     rocket  = SpaceVehicle(stage, gravity)
 
@@ -37,7 +37,7 @@ function launch_ariane()
 
     tank    = Tank(mf, m₀)
     engine  = Engine("ArianeSRB", thrust, Isp)
-    stage   = Rocket(Sattelite(0.0), tank, engine)
+    stage   = Rocket(Satellite(0.0), tank, engine)
     gravity = true
     rocket  = SpaceVehicle(stage, gravity)
 

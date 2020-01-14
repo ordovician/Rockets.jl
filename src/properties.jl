@@ -41,7 +41,7 @@ Isp(cluster::EngineCluster) = Isp(cluster.engine)
 ###################### thrust #############################################
 mass(ship::SpaceVehicle)     = mass(ship.active_stage)
 mass(payload::Payload)       = error("mass not defined for ", typeof(payload))
-mass(sattelite::Sattelite)   = sattelite.mass
+mass(sattelite::Satellite)   = sattelite.mass
 mass(capsule::Capsule)       = capsule.mass
 
 """
