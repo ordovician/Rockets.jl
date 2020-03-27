@@ -1,5 +1,6 @@
 import Base: copy
-export stage_separate!, detach_sideboosters!, update!, combine, fulltank! 
+export stage_separate!, detach_sideboosters!, update!, combine, fulltank!
+export popfirst!, pushfirst! 
 
 """
 	stage_separate!(ship::SpaceVehicle)
@@ -29,6 +30,14 @@ function detach_sideboosters!(ship::SpaceVehicle)
 	else
 		false
 	end
+end
+
+function attach_sidebooster!(r::Rocket, boosters::AbstractArray{Rocket})
+    if length() == 1
+        throw(AssemblyError(r, "Attaching a single booster gives asymmetrical mass distribution", boosters))
+    end
+    append!(r.sideboosters, boosters)
+    r
 end
 
 ###################### copy #############################################
@@ -67,6 +76,16 @@ function update!(r::Rocket, t::Number, Δt::Number)
 	end
 end
 
+###################### Collection Behavior #########################################
+popfirst!(ship::SpaceVehicle) = stage_separate!(ship) 
+
+function pushfirst!(ship::SpaceVehicle, rockets...)
+    for r in reverse(rockets)
+        r.payload = ship.active_stage
+        ship.active_stage = r
+    end
+    ship
+end
 
 ###################### Propellant Tank #############################################
 

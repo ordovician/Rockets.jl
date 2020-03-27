@@ -45,15 +45,15 @@ function load_engines()
 end
 
 """
-	getindex(engines::Array{Engine}, key)
-Gives a dictionary style interface to an array of rocket engines, so we can conveniently lookup an engine
-based on a name.
+	getindex(engines::AbstractArray{Engine}, key)
+Gives a dictionary style interface to an array of rocket engines, 
+so we can conveniently lookup an engine based on a name.
 
 ## Example
 	engines = load_rocket_engines()
 	kestrel = engines["Kestrel 2"]
 """
-function getindex(engines::Array{Engine}, key::AbstractString)
+function getindex(engines::AbstractArray{Engine}, key::AbstractString)
    i = findfirst(e -> e.name == key, engines)
    if i == nothing
        throw(KeyError(key))

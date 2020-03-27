@@ -11,6 +11,7 @@ include("transform.jl")
 
 include("rocket-parts.jl")
 include("vehicles.jl")
+include("exceptions.jl")
 
 include("properties.jl")
 include("actions.jl")

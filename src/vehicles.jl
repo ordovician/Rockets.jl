@@ -1,5 +1,6 @@
 export  SpaceVehicle, 
-        Payload, NoPayload, Rocket, Capsule, SpaceProbe, Satellite
+        Payload, NoPayload, nopayload,
+        Rocket, Capsule, SpaceProbe, Satellite
 
 """
 Anything a stage pushes into the air/space with its booster. Could be e.g. a sattelite or another rocket stage
@@ -9,6 +10,9 @@ abstract type Payload end
 "Rocket with no payload, such as a detached booster."
 struct NoPayload <: Payload
 end
+
+const nopayload = NoPayload()
+
 
 """
 A single stage rocket, with a payload which could potentially be another rocket 
@@ -55,3 +59,12 @@ function SpaceVehicle(r::Rocket, gravity::Bool = true)
 	body = RigidBody(mass(r), 0.0)
 	SpaceVehicle(r, body, gravity)
 end
+
+function SpaceVehicle(rockets::Array{Rocket})
+    ship = SpaceVehicle()
+    pushfirst!(ship, rockets...)
+    ship
+end
+
+SpaceVehicle() = SpaceVehicle(nopayload)
+SpaceVehicle(stages::Payload...) = SpaceVehicle(collect(stages))

@@ -8,7 +8,7 @@ export build_spaceship, simstep!, runsimulator, simulate_launch, delta_velocity
 "Use to find items in array"
 equal(x) = y -> y == x
 
-function build_spaceship(engines::Array{Engine}, tanks::Dict{String,Tank})
+function build_spaceship(engines::AbstractArray{Engine}, tanks::Dict{String,Tank})
 	tank1 = tanks["F9 1st stage"]
 	tank2 = tanks["F9 2nd stage"]
 
