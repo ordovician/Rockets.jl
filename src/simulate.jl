@@ -71,12 +71,12 @@ function simulate_launch(spaceship::SpaceVehicle, Δt::Number; max_duration::Num
 end
 
 """
-	delta_velocity(rocket, Δt)
+	delta_velocity(spaceship, Δt)
 Calculate Δv of rocket using integration as opposed to using Tsiolkovsky rocket equation.
 It copies the `rocket` object, so it never gets mutated.
 """
-function delta_velocity(rocket::SpaceVehicle, Δt::Number)
-    r = simulate_launch(rocket, Δt)
+function delta_velocity(spaceship::SpaceVehicle, Δt::Number)
+    r = simulate_launch(spaceship, Δt)
 	velocity(r)
 end
 
