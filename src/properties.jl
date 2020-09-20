@@ -38,7 +38,8 @@ thrust(cluster::EngineCluster) :: Real  = thrust(cluster.engine) * cluster.count
 Isp(engine::SingleEngine)   = engine.Isp
 Isp(cluster::EngineCluster) = Isp(cluster.engine)
 
-###################### thrust #############################################
+###################### mass #############################################
+mass(paylod::NoPayload)      = 0.0
 mass(ship::SpaceVehicle)     = mass(ship.active_stage)
 mass(payload::Payload)       = error("mass not defined for ", typeof(payload))
 mass(sattelite::Satellite)   = sattelite.mass

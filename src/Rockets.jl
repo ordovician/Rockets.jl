@@ -17,6 +17,7 @@ include("properties.jl")
 include("actions.jl")
 
 include("iteration.jl")
+include("factory.jl")
 include("parts-loading.jl")
 
 include("display.jl")

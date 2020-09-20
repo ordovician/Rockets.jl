@@ -55,7 +55,7 @@ mutable struct SpaceVehicle
 	gravity::Bool		# Is rocket affected by gravity
 end
 
-function SpaceVehicle(r::Rocket, gravity::Bool = true)
+function SpaceVehicle(r::Payload, gravity::Bool = true)
 	body = RigidBody(mass(r), 0.0)
 	SpaceVehicle(r, body, gravity)
 end
@@ -67,4 +67,3 @@ function SpaceVehicle(rockets::Array{Rocket})
 end
 
 SpaceVehicle() = SpaceVehicle(nopayload)
-SpaceVehicle(stages::Payload...) = SpaceVehicle(collect(stages))
